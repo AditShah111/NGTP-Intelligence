@@ -1,4 +1,4 @@
-import { StatutoryParameter, CaseDocument, PrecedentAnalysis } from '../types';
+﻿code_statutory_calibrated = """import { StatutoryParameter, CaseDocument, PrecedentAnalysis } from '../types';
 
 export function evaluateStatutoryParameters(
   financialYear: string,
@@ -172,3 +172,9 @@ export function evaluateStatutoryParameters(
     }
   ];
 }
+"""
+
+with open("src/service/statutory-engine.ts", "w", encoding="utf-8") as f:
+    f.write(code_statutory_calibrated)
+
+print("Updated statutory-engine.ts with dynamic precedent weight calibration!")

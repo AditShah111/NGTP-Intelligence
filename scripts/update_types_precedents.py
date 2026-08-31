@@ -1,4 +1,4 @@
-import { z } from 'zod';
+﻿code_types = """import { z } from 'zod';
 
 export type EvidenceStrength = 
   | 'Established' 
@@ -261,3 +261,9 @@ export const CaseEvaluationRequestSchema = z.object({
 });
 
 export type CaseEvaluationRequest = z.infer<typeof CaseEvaluationRequestSchema>;
+"""
+
+with open("src/types/index.ts", "w", encoding="utf-8") as f:
+    f.write(code_types)
+
+print("Updated src/types/index.ts with evidentiary precedent structures!")

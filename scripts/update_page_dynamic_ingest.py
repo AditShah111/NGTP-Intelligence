@@ -1,4 +1,4 @@
-'use client';
+﻿page_code_dynamic = """'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
@@ -315,3 +315,9 @@ export default function HomePage() {
     </div>
   );
 }
+"""
+
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_code_dynamic)
+
+print("Updated page.tsx with real-time precedent ingestion handler and parameter calibration!")

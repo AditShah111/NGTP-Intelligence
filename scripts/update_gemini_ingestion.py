@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+﻿code_gemini_full = """import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ENV } from '../config/env';
 import { PrecedentAnalysis, PrecedentEvidentiaryImpact, CaseDocument } from '../types';
 
@@ -51,7 +51,7 @@ export async function ingestRealTimeNgtpPrecedents(
   userApiKey?: string,
   documents: CaseDocument[] = []
 ): Promise<PrecedentAnalysis[] | null> {
-  const docSummary = documents.map(d => `${d.name} (${d.type}): ${d.extractedTextSnippet}`).join('\n');
+  const docSummary = documents.map(d => `${d.name} (${d.type}): ${d.extractedTextSnippet}`).join('\\n');
 
   const prompt = `Act as an expert Indian GST judicial researcher. Ingest and analyze real-time landmark and latest (2023, 2024, 2025, 2026) Indian High Court and Supreme Court rulings specifically relating to NGTP (Non-Genuine / Non-Existent Taxable Persons), Section 16(2)(c), Section 74, fake invoicing, or supplier non-payment.
 
@@ -116,7 +116,7 @@ Return ONLY a valid JSON array matching this exact schema:
   if (!raw) return null;
 
   try {
-    const jsonMatch = raw.match(/\[[\s\S]*\]/);
+    const jsonMatch = raw.match(/\\[[\\s\\S]*\\]/);
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]) as PrecedentAnalysis[];
     }
@@ -169,7 +169,7 @@ Return ONLY a JSON array with schema:
   if (!raw) return null;
 
   try {
-    const jsonMatch = raw.match(/\[[\s\S]*\]/);
+    const jsonMatch = raw.match(/\\[[\\s\\S]*\\]/);
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]);
     }
@@ -178,3 +178,9 @@ Return ONLY a JSON array with schema:
   }
   return null;
 }
+"""
+
+with open("src/service/gemini-client.ts", "w", encoding="utf-8") as f:
+    f.write(code_gemini_full)
+
+print("Updated src/service/gemini-client.ts with real-time NGTP case law ingestion and evidence extraction!")

@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿import { NextResponse } from 'next/server';
 import { getAllCases, saveCase, getCaseById } from '../../../repo/case-repo';
 import { CaseEvaluationRequestSchema, CaseDocument } from '../../../types';
 import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const parsed = CaseEvaluationRequestSchema.parse(body);
     
-    const documents: CaseDocument[] = (parsed.documents || (parsed.documentTexts as any) || []) as CaseDocument[];
+    const documents: CaseDocument[] = ((parsed.documents || (body.documentTexts as any) || []) as CaseDocument[]);
 
     const evaluated = await runComplete13StepEvaluation(
       parsed.title,
