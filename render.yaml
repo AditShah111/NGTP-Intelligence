@@ -4,9 +4,12 @@
     env: node
     plan: free
     buildCommand: npm install && npm run build
-    startCommand: npm start
+    startCommand: node server.js
+    healthCheckPath: /api/health
     envVars:
-      - key: DATABASE_URL
-        value: "postgresql://postgres:Moksha@591$%@db.wvgomkamelpziuwdqgbm.supabase.co:5432/postgres"
+      - key: PORT
+        value: 10000
       - key: NODE_ENV
         value: production
+      - key: DATABASE_URL
+        value: "postgresql://postgres:Moksha@591$%@db.wvgomkamelpziuwdqgbm.supabase.co:5432/postgres"
