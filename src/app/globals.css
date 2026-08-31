@@ -1,0 +1,39 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#070b14] text-slate-100 font-sans antialiased min-h-screen selection:bg-amber-500 selection:text-black;
+  }
+}
+
+/* Custom Scrollbar for Legal Documents & Tables */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0c1322;
+}
+::-webkit-scrollbar-thumb {
+  background: #233863;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #33528e;
+}
+
+.legal-glass {
+  background: rgba(12, 19, 34, 0.85);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(35, 56, 99, 0.4);
+}
+
+.legal-card-hover {
+  transition: all 0.2s ease-in-out;
+}
+.legal-card-hover:hover {
+  border-color: rgba(72, 114, 190, 0.6);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+}

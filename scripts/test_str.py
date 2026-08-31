@@ -1,0 +1,1 @@
+print("Single quote here-string works with & and $ and ' and \" perfectly!")
