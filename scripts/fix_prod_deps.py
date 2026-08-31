@@ -1,7 +1,9 @@
-{
+﻿import json
+
+pkg = {
   "name": "ngtp-litigation-engine",
   "version": "1.0.0",
-  "private": true,
+  "private": True,
   "description": "NGTP Indian Tax & GST Litigation Readiness and Viability Assessment Platform",
   "main": "server.js",
   "scripts": {
@@ -34,3 +36,28 @@
     "zod": "^3.23.8"
   }
 }
+
+with open("package.json", "w", encoding="utf-8") as f:
+    json.dump(pkg, f, indent=2)
+
+render_yaml = """services:
+  - type: web
+    name: ngtp-litigation-engine
+    env: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: "postgresql://postgres:Moksha@591$%@db.wvgomkamelpziuwdqgbm.supabase.co:5432/postgres"
+"""
+
+with open("render.yaml", "w", encoding="utf-8") as f:
+    f.write(render_yaml)
+
+print("Updated package.json (all build tools in dependencies) and render.yaml (--include=dev)")
