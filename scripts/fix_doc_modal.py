@@ -1,4 +1,4 @@
-'use client';
+﻿code_doc_modal = """'use client';
 
 import React, { useState, useRef } from 'react';
 import { X, Upload, FileText, CheckCircle2, AlertTriangle, Trash2, Eye, FilePlus, Sparkles, Loader2 } from 'lucide-react';
@@ -37,7 +37,7 @@ export const DocumentUploaderModal: React.FC<DocumentUploaderModalProps> = ({
         const buffer = await file.arrayBuffer();
         const decoder = new TextDecoder('utf-8', { fatal: false });
         const rawText = decoder.decode(buffer);
-        extractedText = rawText.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, ' ').replace(/\s+/g, ' ').slice(0, 4000);
+        extractedText = rawText.replace(/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F-\\x9F]/g, ' ').replace(/\\s+/g, ' ').slice(0, 4000);
         if (!extractedText.trim()) {
           extractedText = `File content from ${file.name} (Size: ${(file.size / 1024).toFixed(1)} KB)`;
         }
@@ -214,3 +214,8 @@ export const DocumentUploaderModal: React.FC<DocumentUploaderModalProps> = ({
     </div>
   );
 };
+"""
+
+with open("src/components/DocumentUploaderModal.tsx", "w", encoding="utf-8") as f:
+    f.write(code_doc_modal)
+print("Updated DocumentUploaderModal.tsx")

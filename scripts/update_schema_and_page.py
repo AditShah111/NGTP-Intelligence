@@ -1,4 +1,48 @@
-'use client';
+﻿import os
+
+code_api_analyze = """import { NextResponse } from 'next/server';
+import { CaseEvaluationRequestSchema, CaseDocument } from '../../../types';
+import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
+import { saveCase } from '../../../repo/case-repo';
+
+export const dynamic = 'force-dynamic';
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const parsed = CaseEvaluationRequestSchema.parse(body);
+
+    const documents: CaseDocument[] = (parsed.documents || (parsed.documentTexts as any) || []) as CaseDocument[];
+
+    const evaluated = await runComplete13StepEvaluation(
+      parsed.title,
+      parsed.taxpayerName,
+      parsed.gstin,
+      parsed.financialYear,
+      parsed.disputedAmount,
+      parsed.noticeType,
+      parsed.primaryIssue,
+      parsed.caseSummary,
+      documents,
+      parsed.geminiApiKey
+    );
+
+    await saveCase(evaluated);
+
+    return NextResponse.json({
+      success: true,
+      evaluatedCase: evaluated
+    });
+  } catch (err: any) {
+    return NextResponse.json({
+      success: false,
+      error: err.message
+    }, { status: 400 });
+  }
+}
+"""
+
+code_page = """'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
@@ -263,3 +307,11 @@ export default function HomePage() {
     </div>
   );
 }
+"""
+
+with open("src/app/api/analyze/route.ts", "w", encoding="utf-8") as f:
+    f.write(code_api_analyze)
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(code_page)
+
+print("Updated /api/analyze and page.tsx with real dynamic re-evaluation!")

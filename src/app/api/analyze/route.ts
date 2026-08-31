@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { CaseEvaluationRequestSchema } from '../../../types';
+import { CaseEvaluationRequestSchema, CaseDocument } from '../../../types';
 import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
 import { saveCase } from '../../../repo/case-repo';
 
@@ -10,6 +10,8 @@ export async function POST(req: Request) {
     const body = await req.json();
     const parsed = CaseEvaluationRequestSchema.parse(body);
 
+    const documents: CaseDocument[] = (parsed.documents || (parsed.documentTexts as any) || []) as CaseDocument[];
+
     const evaluated = await runComplete13StepEvaluation(
       parsed.title,
       parsed.taxpayerName,
@@ -19,7 +21,7 @@ export async function POST(req: Request) {
       parsed.noticeType,
       parsed.primaryIssue,
       parsed.caseSummary,
-      parsed.documentTexts || [],
+      documents,
       parsed.geminiApiKey
     );
 

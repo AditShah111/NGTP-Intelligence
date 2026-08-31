@@ -1,4 +1,4 @@
-'use client';
+﻿code_new_modal = """'use client';
 
 import React, { useState, useRef } from 'react';
 import { X, Scale, PlusCircle, Upload, FileText, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
@@ -52,7 +52,7 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
         } else {
           const buffer = await file.arrayBuffer();
           const decoder = new TextDecoder('utf-8', { fatal: false });
-          text = decoder.decode(buffer).replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/g, ' ').replace(/\s+/g, ' ').slice(0, 3000);
+          text = decoder.decode(buffer).replace(/[\\x00-\\x08\\x0B\\x0C\\x0E-\\x1F\\x7F-\\x9F]/g, ' ').replace(/\\s+/g, ' ').slice(0, 3000);
         }
 
         const lower = (file.name + ' ' + text).toLowerCase();
@@ -284,3 +284,8 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
     </div>
   );
 };
+"""
+
+with open("src/components/NewCaseModal.tsx", "w", encoding="utf-8") as f:
+    f.write(code_new_modal)
+print("Updated NewCaseModal.tsx")

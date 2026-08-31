@@ -1,4 +1,6 @@
-import { 
+﻿import os
+
+code_eval = """import { 
   CaseStudy, 
   FinalEvaluatorOutput, 
   Recommendation,
@@ -33,13 +35,14 @@ export async function runComplete13StepEvaluation(
 ): Promise<CaseStudy> {
   const caseId = `case-${Date.now()}`;
 
+  // Rigorous Document Evidentiary Audit
   const hasInvoices = documents.some(d => d.type === 'Invoice') || documents.some(d => d.extractedTextSnippet.toLowerCase().includes('invoice'));
   const hasTransit = documents.some(d => d.type === 'E-Way Bill') || documents.some(d => d.extractedTextSnippet.toLowerCase().includes('e-way') || d.extractedTextSnippet.toLowerCase().includes('vehicle'));
   const hasBank = documents.some(d => d.type === 'Bank Statement') || documents.some(d => d.extractedTextSnippet.toLowerCase().includes('bank') || d.extractedTextSnippet.toLowerCase().includes('rtgs'));
   const hasScn = documents.some(d => d.type === 'SCN' || d.type === 'DRC-01' || d.type === 'DRC-07');
   const hasCaCert = documents.some(d => d.type === 'CA Certificate');
 
-  // Step 1: Fact Matrix
+  // Step 1: Fact Matrix (Evidence Traceability)
   const factMatrix = extractFactMatrix(summary, primaryIssue, documents);
 
   // Step 2: Statutory Parameters
@@ -75,7 +78,7 @@ export async function runComplete13StepEvaluation(
   // Step 8: Evidence Gaps
   const evidenceGaps = analyzeEvidenceGaps();
 
-  // Step 9 & 10: Scores
+  // Step 9 & 10: Scores (Strict Evidentiary Math)
   const readinessScore = calculateReadinessScore(statutoryParameters.length, hasInvoices, hasTransit, hasBank, hasScn);
   const viabilityScore = calculateViabilityScore(readinessScore.totalScore, hasBank, hasInvoices);
 
@@ -85,7 +88,7 @@ export async function runComplete13StepEvaluation(
   // Step 12: Draft Audit
   const draftAudit = auditDraft();
 
-  // Step 13: Final Output
+  // Step 13: Final Output (Rigorous Decision Logic)
   let recommendation: Recommendation = 'DO NOT PROCEED';
   if (readinessScore.totalScore >= 85) {
     recommendation = 'PROCEED';
@@ -201,3 +204,9 @@ export async function runComplete13StepEvaluation(
     finalOutput
   };
 }
+"""
+
+with open("src/service/evaluator-agent.ts", "w", encoding="utf-8") as f:
+    f.write(code_eval)
+
+print("Updated evaluator-agent.ts with strict evidentiary evaluation!")

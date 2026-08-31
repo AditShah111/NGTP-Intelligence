@@ -245,6 +245,7 @@ export const CaseEvaluationRequestSchema = z.object({
   primaryIssue: z.string(),
   caseSummary: z.string(),
   geminiApiKey: z.string().optional(),
+  documents: z.array(z.any()).optional(),
   documentTexts: z.array(z.object({
     name: z.string(),
     type: z.string(),
