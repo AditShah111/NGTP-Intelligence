@@ -1,4 +1,4 @@
-import { z } from 'zod';
+﻿code_types_hierarchy = """import { z } from 'zod';
 
 export type EvidenceStrength = 
   | 'Established' 
@@ -302,3 +302,9 @@ export const CaseEvaluationRequestSchema = z.object({
 });
 
 export type CaseEvaluationRequest = z.infer<typeof CaseEvaluationRequestSchema>;
+"""
+
+with open("src/types/index.ts", "w", encoding="utf-8") as f:
+    f.write(code_types_hierarchy)
+
+print("Updated src/types/index.ts with Judicial Hierarchy and Article 141 Conflict types!")

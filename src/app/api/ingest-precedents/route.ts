@@ -1,7 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+﻿import { NextRequest, NextResponse } from 'next/server';
 import { ingestRealTimeNgtpPrecedents } from '../../../service/gemini-client';
 import { evaluateStatutoryParameters } from '../../../service/statutory-engine';
 import { BENCHMARK_PRECEDENTS } from '../../../service/precedent-engine';
+import { resolvePrecedentConflicts } from '../../../service/hierarchy-engine';
 import { CaseDocument } from '../../../types';
 
 export const dynamic = 'force-dynamic';
@@ -26,7 +27,7 @@ export async function POST(req: NextRequest) {
     // 1. Ingest dynamic case laws via Gemini
     let livePrecedents = await ingestRealTimeNgtpPrecedents(topicDomain, primaryIssue, financialYear, geminiApiKey, documents);
     
-    // If API key is absent or live search returned empty, fall back to rich benchmark library with full evidentiary breakdown
+    // Fall back to rich benchmark library if needed
     if (!livePrecedents || livePrecedents.length === 0) {
       livePrecedents = BENCHMARK_PRECEDENTS.map(p => ({
         ...p,
@@ -45,7 +46,10 @@ export async function POST(req: NextRequest) {
       }));
     }
 
-    // 2. Calibrate statutory parameters dynamically
+    // 2. Resolve Article 141 Judicial Hierarchy & High Court Conflicts
+    livePrecedents = resolvePrecedentConflicts(livePrecedents, hasBank);
+
+    // 3. Calibrate statutory parameters dynamically
     const calibratedParameters = evaluateStatutoryParameters(
       financialYear,
       primaryIssue,

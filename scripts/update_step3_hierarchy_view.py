@@ -1,4 +1,4 @@
-'use client';
+﻿step3_hierarchy_view = """'use client';
 
 import React, { useState } from 'react';
 import { PrecedentAnalysis } from '../../types';
@@ -243,3 +243,9 @@ export const Step3Step4PrecedentsView: React.FC<Props> = ({
     </div>
   );
 };
+"""
+
+with open("src/components/steps/Step3Step4PrecedentsView.tsx", "w", encoding="utf-8") as f:
+    f.write(step3_hierarchy_view)
+
+print("Updated Step3Step4PrecedentsView with Article 141 Conflict Resolution and Bench Authority Scores!")
