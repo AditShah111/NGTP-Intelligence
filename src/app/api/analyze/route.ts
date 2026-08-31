@@ -3,6 +3,8 @@ import { CaseEvaluationRequestSchema } from '../../../types';
 import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
 import { saveCase } from '../../../repo/case-repo';
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();

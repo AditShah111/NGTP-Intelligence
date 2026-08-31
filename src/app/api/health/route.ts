@@ -1,11 +1,16 @@
 import { NextResponse } from 'next/server';
 import { pool } from '../../../repo/db';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   let dbStatus = 'disconnected';
   try {
-    const res = await pool.query('SELECT 1 as test');
-    if (res.rows.length > 0) dbStatus = 'connected';
+    const res = await Promise.race([
+      pool.query('SELECT 1 as test'),
+      new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 2000))
+    ]);
+    if ((res as any)?.rows?.length > 0) dbStatus = 'connected';
   } catch (err) {
     dbStatus = 'fallback_cache';
   }

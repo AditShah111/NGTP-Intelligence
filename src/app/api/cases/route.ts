@@ -3,6 +3,8 @@ import { getAllCases, saveCase, getCaseById } from '../../../repo/case-repo';
 import { CaseEvaluationRequestSchema } from '../../../types';
 import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get('id');
