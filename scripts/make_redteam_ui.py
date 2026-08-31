@@ -1,4 +1,6 @@
-'use client';
+﻿import os
+
+code_redteam_ui = """'use client';
 
 import React, { useState } from 'react';
 import { AdversarialRedTeamItem } from '@/types';
@@ -147,3 +149,9 @@ export const Step7RedTeamBattleView: React.FC<Step7Props> = ({ redTeamItems }) =
     </div>
   );
 };
+"""
+
+with open("src/components/steps/Step7RedTeamBattleView.tsx", "w", encoding="utf-8") as f:
+    f.write(code_redteam_ui)
+
+print("Updated Step7RedTeamBattleView with live war-room interactivity!")

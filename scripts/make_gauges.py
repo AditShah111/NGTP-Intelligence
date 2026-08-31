@@ -1,4 +1,7 @@
-'use client';
+﻿import os
+
+# Create an enhanced Gauges and Radar component for Step 9 & 10
+code_gauges = """'use client';
 
 import React from 'react';
 import { ReadinessScoreBreakdown, ViabilityScoreBreakdown } from '@/types';
@@ -202,3 +205,9 @@ export const Step9Step10ScoresView: React.FC<Step9Props> = ({ readiness, viabili
     </div>
   );
 };
+"""
+
+with open("src/components/steps/Step9Step10ScoresView.tsx", "w", encoding="utf-8") as f:
+    f.write(code_gauges)
+
+print("Updated Step9Step10ScoresView with high-craft radial gauges and breakdown bars!")
