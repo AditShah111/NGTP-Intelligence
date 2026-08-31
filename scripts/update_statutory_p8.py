@@ -1,4 +1,6 @@
-import { StatutoryParameter, CaseDocument } from '../types';
+﻿import os
+
+code_statutory_p8 = """import { StatutoryParameter, CaseDocument } from '../types';
 
 export function evaluateStatutoryParameters(
   financialYear: string,
@@ -150,3 +152,9 @@ export function evaluateStatutoryParameters(
     }
   ];
 }
+"""
+
+with open("src/service/statutory-engine.ts", "w", encoding="utf-8") as f:
+    f.write(code_statutory_p8)
+
+print("Updated statutory-engine.ts with all 8 complete statutory parameters (P1 to P8)!")
