@@ -98,10 +98,10 @@ export const Header: React.FC<HeaderProps> = ({
                   ? 'bg-purple-950/70 border-purple-500/50 text-purple-300' 
                   : 'bg-legal-900 border-legal-700 text-slate-400 hover:text-slate-200'
               }`}
-              title="Configure Gemini LLM API Key"
+              title="Configure Gemini 3.5 / 2.5 LLM API Key"
             >
               <Sparkles className={`w-3.5 h-3.5 ${hasApiKey ? 'text-purple-400' : 'text-slate-400'}`} />
-              <span>{hasApiKey ? 'Gemini 1.5 Active' : 'Set Gemini Key'}</span>
+              <span>{hasApiKey ? 'Gemini 3.5 Active' : 'Set Gemini 3.5 Key'}</span>
             </button>
 
             {/* New Assessment Button */}
