@@ -1,4 +1,4 @@
-import { PrecedentAnalysis } from '../types';
+﻿code_precedents_expanded = """import { PrecedentAnalysis } from '../types';
 
 export const BENCHMARK_PRECEDENTS: PrecedentAnalysis[] = [
   {
@@ -301,3 +301,9 @@ export const BENCHMARK_PRECEDENTS: PrecedentAnalysis[] = [
 export function getApplicablePrecedents(primaryIssue: string, financialYear: string): PrecedentAnalysis[] {
   return BENCHMARK_PRECEDENTS;
 }
+"""
+
+with open("src/service/precedent-engine.ts", "w", encoding="utf-8") as f:
+    f.write(code_precedents_expanded)
+
+print("Updated precedent-engine.ts with complete multi-High Court & Supreme Court benchmark suite!")

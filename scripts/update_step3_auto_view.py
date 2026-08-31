@@ -1,4 +1,4 @@
-'use client';
+﻿step3_auto_view = """'use client';
 
 import React, { useState } from 'react';
 import { PrecedentAnalysis } from '../../types';
@@ -305,3 +305,9 @@ export const Step3Step4PrecedentsView: React.FC<Props> = ({
     </div>
   );
 };
+"""
+
+with open("src/components/steps/Step3Step4PrecedentsView.tsx", "w", encoding="utf-8") as f:
+    f.write(step3_auto_view)
+
+print("Updated Step3Step4PrecedentsView with 100% automated ingestion banner!")
