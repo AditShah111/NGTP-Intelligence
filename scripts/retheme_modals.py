@@ -1,4 +1,5 @@
-'use client';
+﻿# 1. Update ExportDossierModal.tsx
+code_export = """'use client';
 
 import React, { useState } from 'react';
 import { X, Download, Copy, Check, FileText } from 'lucide-react';
@@ -19,18 +20,18 @@ export const ExportDossierModal: React.FC<ExportDossierModalProps> = ({
 
   if (!isOpen) return null;
 
-  const reasons = activeCase.finalOutput.executiveVerdict.top5Reasons.map((r, i) => `${i + 1}. ${r}`).join('\n');
-  const strongParams = activeCase.finalOutput.strongestLegalParameters.map((p) => `* ${p}`).join('\n');
-  const weakParams = activeCase.finalOutput.weakestParameters.map((p) => `* ${p}`).join('\n');
-  const strongGrounds = activeCase.finalOutput.strongestGroundsOfChallenge.map(g => `* [Rank #${g.rank} - Strength ${g.strength}/100] ${g.ground}`).join('\n');
-  const opposingArgs = activeCase.finalOutput.strongestOpposingArguments.map(oa => `* ${oa}`).join('\n');
-  const gapReport = activeCase.finalOutput.evidenceGapReport.map(eg => `* ${eg}`).join('\n');
-  const precedentMatrix = activeCase.finalOutput.precedentMatrix.map(pm => `* **${pm.precedent}** - ${pm.applicability} (Comparability Score: ${pm.score}/100)`).join('\n');
-  const errorMatrix = activeCase.finalOutput.lowerAuthorityErrorMatrix.map(em => `* **${em.error}** - ${em.significance}`).join('\n');
-  const draftDefects = activeCase.finalOutput.draftDefects.map(dd => `* [${dd.severity}] ${dd.defect}`).join('\n');
-  const p0Plan = activeCase.finalOutput.litigationImprovementPlan.p0MustFixBeforeFiling.map(i => `* ${i}`).join('\n');
-  const p1Plan = activeCase.finalOutput.litigationImprovementPlan.p1StronglyRecommended.map(i => `* ${i}`).join('\n');
-  const p2Plan = activeCase.finalOutput.litigationImprovementPlan.p2AdditionalStrengthening.map(i => `* ${i}`).join('\n');
+  const reasons = activeCase.finalOutput.executiveVerdict.top5Reasons.map((r, i) => `${i + 1}. ${r}`).join('\\n');
+  const strongParams = activeCase.finalOutput.strongestLegalParameters.map((p) => `* ${p}`).join('\\n');
+  const weakParams = activeCase.finalOutput.weakestParameters.map((p) => `* ${p}`).join('\\n');
+  const strongGrounds = activeCase.finalOutput.strongestGroundsOfChallenge.map(g => `* [Rank #${g.rank} - Strength ${g.strength}/100] ${g.ground}`).join('\\n');
+  const opposingArgs = activeCase.finalOutput.strongestOpposingArguments.map(oa => `* ${oa}`).join('\\n');
+  const gapReport = activeCase.finalOutput.evidenceGapReport.map(eg => `* ${eg}`).join('\\n');
+  const precedentMatrix = activeCase.finalOutput.precedentMatrix.map(pm => `* **${pm.precedent}** - ${pm.applicability} (Comparability Score: ${pm.score}/100)`).join('\\n');
+  const errorMatrix = activeCase.finalOutput.lowerAuthorityErrorMatrix.map(em => `* **${em.error}** - ${em.significance}`).join('\\n');
+  const draftDefects = activeCase.finalOutput.draftDefects.map(dd => `* [${dd.severity}] ${dd.defect}`).join('\\n');
+  const p0Plan = activeCase.finalOutput.litigationImprovementPlan.p0MustFixBeforeFiling.map(i => `* ${i}`).join('\\n');
+  const p1Plan = activeCase.finalOutput.litigationImprovementPlan.p1StronglyRecommended.map(i => `* ${i}`).join('\\n');
+  const p2Plan = activeCase.finalOutput.litigationImprovementPlan.p2AdditionalStrengthening.map(i => `* ${i}`).join('\\n');
 
   const markdownContent = `# NGTP LITIGATION READINESS & VIABILITY DOSSIER
 **Case Title:** ${activeCase.title}
@@ -121,7 +122,7 @@ ${p2Plan}
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = `NGTP-Litigation-Dossier-${activeCase.taxpayerName.replace(/\s+/g, '_')}.md`;
+    link.download = `NGTP-Litigation-Dossier-${activeCase.taxpayerName.replace(/\\s+/g, '_')}.md`;
     link.click();
     URL.revokeObjectURL(url);
   };
@@ -170,3 +171,8 @@ ${p2Plan}
     </div>
   );
 };
+"""
+with open("src/components/ExportDossierModal.tsx", "w", encoding="utf-8") as f:
+    f.write(code_export)
+
+print("Updated ExportDossierModal.tsx to beige theme!")

@@ -151,7 +151,7 @@ export default function HomePage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#070b14] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#FBF9F5] text-slate-900 flex flex-col font-sans">
       {/* Header */}
       <Header
         cases={cases}
@@ -167,16 +167,16 @@ export default function HomePage() {
       <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-6">
         {isLoading ? (
           <div className="flex flex-col items-center justify-center py-24 space-y-4">
-            <Loader2 className="w-10 h-10 text-amber-400 animate-spin" />
-            <div className="text-center font-serif text-lg text-white">
+            <Loader2 className="w-10 h-10 text-amber-600 animate-spin" />
+            <div className="text-center font-serif text-lg font-bold text-slate-900">
               Running Rigorous 13-Step Evidentiary & Statutory Audit...
             </div>
-            <p className="text-xs font-mono text-slate-400 max-w-md text-center">
+            <p className="text-xs font-sans text-slate-600 max-w-md text-center">
               Auditing uploaded documents against Section 16(2) non-obstante tests, Section 155 burden of proof, bank RTGS trails, and Supreme Court precedent ratios.
             </p>
           </div>
         ) : activeCase ? (
-          <div>
+          <div className="animate-fade-in">
             {/* Case Overview Summary Card */}
             <CaseOverviewCard activeCase={activeCase} />
 
@@ -227,14 +227,14 @@ export default function HomePage() {
             </div>
           </div>
         ) : (
-          <div className="text-center py-20 text-slate-400">
+          <div className="text-center py-20 text-slate-500">
             No case loaded. Click "New Assessment" to begin.
           </div>
         )}
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-legal-800/60 bg-[#0c1322]/80 py-4 px-6 text-center text-xs text-slate-500 font-mono">
+      <footer className="border-t border-beige-200 bg-white/80 py-4 px-6 text-center text-xs text-slate-500 font-mono">
         NGTP Indian Tax & GST Appellate Intelligence Engine • Strict Evidentiary & Statutory Discipline • Zero Hallucinations
       </footer>
 

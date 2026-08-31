@@ -1,145 +1,65 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { AdversarialRedTeamItem } from '../../types';
-import { Swords, ShieldAlert, CheckCircle2, XCircle, AlertTriangle, Play, Shield, Flame, RotateCcw } from 'lucide-react';
+import { Swords, ShieldAlert, CheckCircle2, AlertTriangle } from 'lucide-react';
 
-interface Step7Props {
+interface Props {
   redTeamItems: AdversarialRedTeamItem[];
 }
 
-export const Step7RedTeamBattleView: React.FC<Step7Props> = ({ redTeamItems }) => {
-  const [selectedAttackId, setSelectedAttackId] = useState<string>(redTeamItems[0]?.id || '');
-  const [activeSimulationFilter, setActiveSimulationFilter] = useState<'ALL' | 'VULNERABLE' | 'SURVIVES'>('ALL');
-
-  const filteredItems = redTeamItems.filter(item => {
-    if (activeSimulationFilter === 'VULNERABLE') return !item.survivesAttack;
-    if (activeSimulationFilter === 'SURVIVES') return item.survivesAttack;
-    return true;
-  });
-
-  const selectedItem = redTeamItems.find(i => i.id === selectedAttackId) || redTeamItems[0];
-
+export const Step7RedTeamBattleView: React.FC<Props> = ({ redTeamItems }) => {
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2">
-        <div>
-          <h3 className="text-lg font-serif font-bold text-white flex items-center gap-2">
-            <Swords className="w-5 h-5 text-rose-400" />
-            STEP 7: Adversarial Red-Team War Room (Opposing Standing Counsel Attack Simulation)
-          </h3>
-          <p className="text-xs text-slate-400">
-            Independent aggressive stress-testing simulating Senior Revenue Departmental Representatives to pressure-test factual assertions, statutory interpretations, and burden of proof.
-          </p>
-        </div>
-
-        {/* Filter Pills */}
-        <div className="flex items-center gap-1.5 bg-legal-950 p-1 rounded-lg border border-legal-800 text-xs font-mono">
-          {(['ALL', 'SURVIVES', 'VULNERABLE'] as const).map(filter => (
-            <button
-              key={filter}
-              onClick={() => setActiveSimulationFilter(filter)}
-              className={`px-2.5 py-1 rounded-md transition-all ${
-                activeSimulationFilter === filter 
-                  ? 'bg-amber-500 text-black font-bold' 
-                  : 'text-slate-400 hover:text-slate-200'
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Featured Arena Card for Active Attack */}
-      {selectedItem && (
-        <div className="legal-glass rounded-2xl p-6 border-2 border-rose-500/40 shadow-2xl relative overflow-hidden bg-gradient-to-b from-rose-950/20 via-legal-950/80 to-emerald-950/20">
-          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-4 border-b border-legal-800">
-            <div className="flex items-center gap-2.5">
-              <span className="p-2 rounded-lg bg-rose-500/20 border border-rose-500/40 text-rose-400">
-                <Flame className="w-5 h-5" />
-              </span>
-              <div>
-                <span className="text-[10px] font-mono uppercase text-rose-400 tracking-wider font-bold">ACTIVE SIMULATION FOCUS</span>
-                <h4 className="text-base font-serif font-bold text-white">{selectedItem.category}</h4>
-              </div>
-            </div>
-            <div className="flex items-center gap-3 font-mono text-xs">
-              <div className="bg-rose-950/80 px-3 py-1 rounded-lg border border-rose-800 text-rose-300">
-                Attack Force: <strong>{selectedItem.strengthOfOpposingArgument}/100</strong>
-              </div>
-              <div className={`px-3 py-1 rounded-lg border font-bold ${selectedItem.survivesAttack ? 'bg-emerald-950/90 text-emerald-300 border-emerald-600' : 'bg-rose-950/90 text-rose-300 border-rose-600'}`}>
-                {selectedItem.survivesAttack ? 'DEFENSE HOLDS (PASSED)' : 'RISK OF COLLAPSE'}
-              </div>
-            </div>
+      <div className="bg-white border border-beige-200 rounded-2xl p-6 shadow-sm">
+        <div className="flex items-center justify-between pb-4 border-b border-beige-200">
+          <div>
+            <h3 className="text-xl font-serif font-bold text-slate-900">Step 7: Adversarial Red-Team War Room (Opposing Counsel Simulation)</h3>
+            <p className="text-xs text-slate-600 mt-0.5">
+              Simulating aggressive Revenue Standing Counsel attacks against Section 16(2)(c), Section 155, and supplier legitimacy.
+            </p>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-4">
-            {/* Left: Revenue Attack */}
-            <div className="bg-rose-950/40 p-5 rounded-xl border border-rose-900/60 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2 text-rose-400 font-mono text-xs font-bold uppercase mb-2">
-                  <ShieldAlert className="w-4 h-4 text-rose-400" />
-                  <span>Revenue Standing Counsel Attack Vector</span>
-                </div>
-                <p className="text-sm text-rose-100 font-serif leading-relaxed italic">
-                  "{selectedItem.opposingArgument}"
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-rose-900/50 text-xs text-slate-400">
-                <strong className="text-rose-400">Tactical Revenue Aim:</strong> Shift burden to taxpayer & trigger non-obstante Section 16(2) denial.
-              </div>
-            </div>
-
-            {/* Right: Taxpayer Shield */}
-            <div className="bg-emerald-950/40 p-5 rounded-xl border border-emerald-900/60 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center gap-2 text-emerald-400 font-mono text-xs font-bold uppercase mb-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-                  <span>Taxpayer Appellate Counter-Shield</span>
-                </div>
-                <p className="text-xs text-emerald-100 font-serif leading-relaxed">
-                  {selectedItem.taxpayerResponse}
-                </p>
-              </div>
-              <div className="mt-4 pt-3 border-t border-emerald-900/50 text-xs font-mono text-emerald-300 bg-emerald-950/60 p-2.5 rounded">
-                <strong>Evidentiary Backing: </strong>{selectedItem.evidenceSupportingResponse}
-              </div>
-            </div>
-          </div>
+          <span className="text-xs font-mono px-3 py-1 rounded-full bg-rose-50 text-rose-800 border border-rose-200 font-semibold">
+            {redTeamItems.length} Attack Vectors Tested
+          </span>
         </div>
-      )}
 
-      {/* Grid of All Red-Team Attack Vectors */}
-      <div className="space-y-3">
-        <div className="text-xs font-mono uppercase text-slate-400 font-bold">All Opposing Attack Vectors ({filteredItems.length}):</div>
-        <div className="grid grid-cols-1 gap-3">
-          {filteredItems.map((item) => (
-            <div 
+        <div className="space-y-4 mt-6">
+          {redTeamItems.map((item) => (
+            <div
               key={item.id}
-              onClick={() => setSelectedAttackId(item.id)}
-              className={`legal-glass rounded-xl p-4 border transition-all cursor-pointer ${
-                selectedAttackId === item.id 
-                  ? 'border-amber-500 bg-legal-900/90 shadow-xl shadow-amber-500/5' 
-                  : 'border-legal-800 hover:border-legal-700'
-              }`}
+              className="bg-beige-50/60 border border-beige-200 rounded-xl p-5 hover:border-amber-300 transition-all shadow-sm"
             >
-              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2 border-b border-legal-800">
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-xs font-bold text-amber-400">{item.category}</span>
+              <div className="flex items-center justify-between gap-2 pb-3 border-b border-beige-200">
+                <span className="font-mono text-xs font-bold text-slate-700 uppercase tracking-wide">
+                  {item.category}
+                </span>
+                <span className={`text-[11px] font-semibold px-2.5 py-0.5 rounded-full border ${
+                  item.survivesAttack 
+                    ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
+                    : 'bg-rose-50 text-rose-800 border-rose-200'
+                }`}>
+                  {item.survivesAttack ? '✓ Defense Survives Attack' : '⚠️ Residual Vulnerability'}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 text-xs">
+                <div className="bg-rose-50/80 p-3.5 rounded-lg border border-rose-200">
+                  <div className="text-[11px] font-mono uppercase text-rose-800 font-bold mb-1 flex items-center gap-1.5">
+                    <Swords className="w-3.5 h-3.5 text-rose-600" />
+                    Revenue Attack (Standing Counsel):
+                  </div>
+                  <p className="text-rose-950 leading-relaxed font-sans">{item.opposingArgument}</p>
                 </div>
-                <div className="flex items-center gap-2 font-mono text-xs">
-                  <span className="text-rose-400 font-semibold">Attack: {item.strengthOfOpposingArgument}/100</span>
-                  <span className={`px-2 py-0.5 rounded text-[11px] font-bold border ${item.survivesAttack ? 'bg-emerald-950 text-emerald-300 border-emerald-700' : 'bg-rose-950 text-rose-300 border-rose-700'}`}>
-                    {item.survivesAttack ? 'SURVIVES' : 'FAIL'}
-                  </span>
-                  <span className="text-slate-400 text-[10px]">Residual Risk: {item.residualRisk}</span>
+
+                <div className="bg-emerald-50/80 p-3.5 rounded-lg border border-emerald-200">
+                  <div className="text-[11px] font-mono uppercase text-emerald-800 font-bold mb-1 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
+                    Taxpayer Defensive Counter:
+                  </div>
+                  <p className="text-emerald-950 leading-relaxed font-sans">{item.taxpayerResponse}</p>
                 </div>
               </div>
-              <p className="text-xs text-slate-300 mt-2 line-clamp-2 italic font-serif">
-                "{item.opposingArgument}"
-              </p>
             </div>
           ))}
         </div>

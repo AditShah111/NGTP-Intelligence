@@ -2,74 +2,57 @@
 
 import React from 'react';
 import { LowerAuthorityError } from '../../types';
-import { AlertOctagon, ShieldAlert, Gavel } from 'lucide-react';
+import { AlertOctagon, Scale, ShieldAlert } from 'lucide-react';
 
-interface Step5Props {
+interface Props {
   errors: LowerAuthorityError[];
 }
 
-export const Step5LowerAuthorityErrorsView: React.FC<Step5Props> = ({ errors }) => {
-  const getSeverityBadge = (strength: string) => {
-    switch (strength) {
-      case 'Fundamental':
-        return 'bg-rose-950/80 text-rose-300 border-rose-500/50';
-      case 'Serious':
-        return 'bg-orange-950/80 text-orange-300 border-orange-500/50';
-      case 'Material':
-        return 'bg-amber-950/80 text-amber-300 border-amber-500/50';
-      default:
-        return 'bg-blue-950/80 text-blue-300 border-blue-500/50';
-    }
-  };
-
+export const Step5LowerAuthorityErrorsView: React.FC<Props> = ({ errors }) => {
   return (
-    <div className="space-y-4">
-      <div>
-        <h3 className="text-base font-serif font-bold text-white flex items-center gap-2">
-          <AlertOctagon className="w-4 h-4 text-rose-400" />
-          STEP 5: Lower Authority Error Analysis & Defect Matrix
-        </h3>
-        <p className="text-xs text-slate-400">
-          Identification of jurisdictional flaws, ignored documentary evidence, statutory misconstructions, and natural justice violations.
-        </p>
-      </div>
-
-      <div className="space-y-3">
-        {errors.map((e) => (
-          <div key={e.id} className="legal-glass rounded-xl p-4 border border-legal-800 hover:border-rose-500/40 transition-all">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 pb-2.5 border-b border-legal-800">
-              <div className="font-serif font-bold text-sm text-white flex items-center gap-2">
-                <Gavel className="w-4 h-4 text-rose-400 flex-shrink-0" />
-                <span>{e.finding}</span>
-              </div>
-              <span className={`px-2.5 py-0.5 rounded text-[11px] font-mono font-bold border ${getSeverityBadge(e.strength)}`}>
-                {e.strength} Error
-              </span>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3 text-xs">
-              <div className="bg-legal-950/60 p-3 rounded border border-legal-800/80">
-                <strong className="text-slate-400 font-mono text-[10px] uppercase">Lower Authority Reasoning:</strong>
-                <p className="text-slate-300 mt-1 leading-relaxed">{e.lowerAuthorityReasoning}</p>
-              </div>
-              <div className="bg-legal-950/60 p-3 rounded border border-legal-800/80">
-                <strong className="text-amber-400 font-mono text-[10px] uppercase">Evidence Ignored / Misread:</strong>
-                <p className="text-amber-200/90 mt-1 leading-relaxed">{e.evidenceIgnoredMisread}</p>
-              </div>
-            </div>
-
-            <div className="mt-3 pt-2.5 border-t border-legal-800/60 flex flex-col sm:flex-row justify-between gap-2 text-xs">
-              <div className="text-rose-300">
-                <strong className="text-slate-400">Legal Error: </strong>
-                {e.legalError}
-              </div>
-              <div className="font-mono text-blue-300 text-[11px] flex-shrink-0">
-                <strong className="text-slate-400">Counter Authority: </strong>
-                {e.relevantAuthority}
-              </div>
-            </div>
+    <div className="space-y-6">
+      <div className="bg-white border border-beige-200 rounded-2xl p-6 shadow-sm">
+        <div className="flex items-center justify-between pb-4 border-b border-beige-200">
+          <div>
+            <h3 className="text-xl font-serif font-bold text-slate-900">Step 5: Lower Authority Error Audit</h3>
+            <p className="text-xs text-slate-600 mt-0.5">
+              Auditing the impugned SCN / DRC-07 order for jurisdictional, evidentiary, and statutory defects.
+            </p>
           </div>
-        ))}
+        </div>
+
+        <div className="space-y-4 mt-6">
+          {errors.map((e) => (
+            <div
+              key={e.id}
+              className="bg-beige-50/60 border border-beige-200 rounded-xl p-5 hover:border-amber-300 transition-all shadow-sm"
+            >
+              <div className="flex items-center justify-between gap-2 pb-3 border-b border-beige-200">
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-xs font-bold px-2 py-0.5 rounded bg-rose-100 text-rose-900 border border-rose-200">
+                    {e.strength} Error
+                  </span>
+                  <h4 className="font-serif font-bold text-sm text-slate-900">{e.finding}</h4>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3 text-xs">
+                <div>
+                  <div className="text-[11px] font-mono uppercase text-slate-400 mb-1">Officer Reasoning:</div>
+                  <p className="text-slate-700 leading-relaxed bg-white p-3 rounded-lg border border-beige-200">
+                    {e.lowerAuthorityReasoning}
+                  </p>
+                </div>
+                <div>
+                  <div className="text-[11px] font-mono uppercase text-slate-400 mb-1">Fatal Legal Defect:</div>
+                  <p className="text-rose-900 leading-relaxed bg-rose-50 p-3 rounded-lg border border-rose-200">
+                    {e.legalError}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

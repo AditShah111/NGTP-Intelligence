@@ -1,4 +1,7 @@
-/** @type {import('tailwindcss').Config} */
+﻿import os
+
+# 1. Update tailwind.config.js
+tailwind_code = """/** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -46,3 +49,57 @@ module.exports = {
   },
   plugins: [],
 };
+"""
+with open("tailwind.config.js", "w", encoding="utf-8") as f:
+    f.write(tailwind_code)
+
+# 2. Update src/app/globals.css
+globals_css = """@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #FBF9F5;
+  --foreground: #1E293B;
+}
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom smooth scrollbar for light theme */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5F1E8;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #D5C9B5;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #BEAD94;
+}
+
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+"""
+with open("src/app/globals.css", "w", encoding="utf-8") as f:
+    f.write(globals_css)
+
+print("Updated tailwind.config.js and globals.css for clean off-white / beige theme!")

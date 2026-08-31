@@ -2,17 +2,17 @@
 
 import React from 'react';
 import { 
-  Table, 
+  FileSearch, 
   Scale, 
   BookOpen, 
   AlertOctagon, 
   FileEdit, 
   Swords, 
-  Search, 
+  SearchX, 
   Gauge, 
-  Navigation, 
-  CheckSquare, 
-  Gavel
+  Compass, 
+  CheckCircle2, 
+  Trophy 
 } from 'lucide-react';
 
 interface StepProgressNavProps {
@@ -20,44 +20,46 @@ interface StepProgressNavProps {
   onSelectStep: (step: number) => void;
 }
 
+const STEPS = [
+  { step: 1, label: 'Fact Matrix', icon: FileSearch },
+  { step: 2, label: 'Statutory Tests', icon: Scale },
+  { step: 3, label: 'Precedents', icon: BookOpen },
+  { step: 5, label: 'Lower Errors', icon: AlertOctagon },
+  { step: 6, label: 'Submissions', icon: FileEdit },
+  { step: 7, label: 'Red-Team War Room', icon: Swords },
+  { step: 8, label: 'Evidence Gaps', icon: SearchX },
+  { step: 9, label: 'Readiness & Viability', icon: Gauge },
+  { step: 11, label: 'Forward Plan', icon: Compass },
+  { step: 12, label: 'Draft Audit', icon: CheckCircle2 },
+  { step: 13, label: 'Executive Verdict', icon: Trophy },
+];
+
 export const StepProgressNav: React.FC<StepProgressNavProps> = ({
   activeStep,
   onSelectStep
 }) => {
-  const steps = [
-    { num: 1, label: 'Fact Matrix', icon: Table },
-    { num: 2, label: 'Statutory Engine', icon: Scale },
-    { num: 3, label: 'Precedents & Score', icon: BookOpen },
-    { num: 5, label: 'Lower Authority Errors', icon: AlertOctagon },
-    { num: 6, label: 'Submission Optimizer', icon: FileEdit },
-    { num: 7, label: 'Red-Team Adversary', icon: Swords },
-    { num: 8, label: 'Evidence Gaps', icon: Search },
-    { num: 9, label: 'Readiness & Viability', icon: Gauge },
-    { num: 11, label: 'Forward Decision', icon: Navigation },
-    { num: 12, label: 'Draft Audit', icon: CheckSquare },
-    { num: 13, label: 'Final Evaluator Verdict', icon: Gavel },
-  ];
-
   return (
-    <div className="flex items-center gap-1.5 overflow-x-auto pb-3 mb-5 border-b border-legal-800/60 scrollbar-thin">
-      {steps.map((s) => {
-        const Icon = s.icon;
-        const isActive = activeStep === s.num;
-        return (
-          <button
-            key={s.num}
-            onClick={() => onSelectStep(s.num)}
-            className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
-              isActive
-                ? 'bg-amber-500 text-black font-semibold shadow-md shadow-amber-500/20'
-                : 'bg-legal-900/80 hover:bg-legal-800 text-slate-300 border border-legal-800/80 hover:border-legal-700'
-            }`}
-          >
-            <Icon className={`w-3.5 h-3.5 ${isActive ? 'text-black' : 'text-amber-400'}`} />
-            <span>Step {s.num}: {s.label}</span>
-          </button>
-        );
-      })}
+    <div className="bg-white border border-beige-200 rounded-2xl p-2 mb-6 shadow-sm overflow-x-auto">
+      <div className="flex items-center gap-1.5 min-w-max">
+        {STEPS.map((s) => {
+          const Icon = s.icon;
+          const isActive = activeStep === s.step;
+          return (
+            <button
+              key={s.step}
+              onClick={() => onSelectStep(s.step)}
+              className={`flex items-center gap-2 px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                isActive
+                  ? 'bg-amber-600 text-white font-semibold shadow-sm'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-beige-50'
+              }`}
+            >
+              <Icon className={`w-4 h-4 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+              <span>{s.label}</span>
+            </button>
+          );
+        })}
+      </div>
     </div>
   );
 };

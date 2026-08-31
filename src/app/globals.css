@@ -2,38 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  body {
-    @apply bg-[#070b14] text-slate-100 font-sans antialiased min-h-screen selection:bg-amber-500 selection:text-black;
-  }
+:root {
+  --background: #FBF9F5;
+  --foreground: #1E293B;
 }
 
-/* Custom Scrollbar for Legal Documents & Tables */
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom smooth scrollbar for light theme */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #0c1322;
+  background: #F5F1E8;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: #233863;
-  border-radius: 3px;
+  background: #D5C9B5;
+  border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-  background: #33528e;
+  background: #BEAD94;
 }
 
-.legal-glass {
-  background: rgba(12, 19, 34, 0.85);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(35, 56, 99, 0.4);
+/* Animation utilities */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.legal-card-hover {
-  transition: all 0.2s ease-in-out;
-}
-.legal-card-hover:hover {
-  border-color: rgba(72, 114, 190, 0.6);
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+.animate-fade-in {
+  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
