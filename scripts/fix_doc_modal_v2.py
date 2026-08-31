@@ -1,4 +1,4 @@
-'use client';
+﻿doc_modal = """'use client';
 
 import React, { useState, useRef } from 'react';
 import { X, Upload, FileText, CheckCircle2, AlertTriangle, Trash2, FilePlus, Sparkles, Loader2, Plus } from 'lucide-react';
@@ -283,3 +283,7 @@ export const DocumentUploaderModal: React.FC<DocumentUploaderModalProps> = ({
     </div>
   );
 };
+"""
+with open("src/components/DocumentUploaderModal.tsx", "w", encoding="utf-8") as f:
+    f.write(doc_modal)
+print("Updated DocumentUploaderModal.tsx successfully!")

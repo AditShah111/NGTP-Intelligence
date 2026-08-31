@@ -1,4 +1,4 @@
-import { FactMatrixItem, CaseDocument, EvidenceStrength } from '../types';
+﻿code_fact = """import { FactMatrixItem, CaseDocument, EvidenceStrength } from '../types';
 
 export function extractFactMatrix(
   caseSummary: string,
@@ -65,3 +65,9 @@ export function extractFactMatrix(
     }
   ];
 }
+"""
+
+with open("src/service/fact-matrix-engine.ts", "w", encoding="utf-8") as f:
+    f.write(code_fact)
+
+print("Updated fact-matrix-engine.ts with strict document type gating!")

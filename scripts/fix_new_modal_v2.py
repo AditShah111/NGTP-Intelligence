@@ -1,4 +1,4 @@
-'use client';
+﻿new_case_modal = """'use client';
 
 import React, { useState, useRef } from 'react';
 import { X, Scale, PlusCircle, Upload, FileText, AlertTriangle, CheckCircle2, Loader2, Plus, Trash2 } from 'lucide-react';
@@ -301,3 +301,7 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
     </div>
   );
 };
+"""
+with open("src/components/NewCaseModal.tsx", "w", encoding="utf-8") as f:
+    f.write(new_case_modal)
+print("Updated NewCaseModal.tsx successfully!")

@@ -1,4 +1,4 @@
-'use client';
+﻿page_code = """'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
@@ -263,3 +263,7 @@ export default function HomePage() {
     </div>
   );
 }
+"""
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_code)
+print("Updated page.tsx successfully!")

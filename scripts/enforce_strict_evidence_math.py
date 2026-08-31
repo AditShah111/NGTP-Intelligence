@@ -1,4 +1,6 @@
-import { 
+﻿import os
+
+code_scoring_strict = """import { 
   ReadinessScoreBreakdown, 
   ViabilityScoreBreakdown, 
   ForwardLitigationDecision 
@@ -152,3 +154,9 @@ export function calculateForwardDecision(
     actionRequiredToAchievePotential: missingItems
   };
 }
+"""
+
+with open("src/service/scoring-engine.ts", "w", encoding="utf-8") as f:
+    f.write(code_scoring_strict)
+
+print("Updated scoring-engine.ts with strict evidence gating!")
