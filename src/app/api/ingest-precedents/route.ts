@@ -3,7 +3,7 @@ import { ingestRealTimeNgtpPrecedents } from '../../../service/gemini-client';
 import { evaluateStatutoryParameters } from '../../../service/statutory-engine';
 import { BENCHMARK_PRECEDENTS } from '../../../service/precedent-engine';
 import { resolvePrecedentConflicts } from '../../../service/hierarchy-engine';
-import { CaseDocument } from '../../../types';
+import { CaseDocument, PrecedentAnalysis } from '../../../types';
 
 export const dynamic = 'force-dynamic';
 
@@ -14,8 +14,10 @@ export async function POST(req: NextRequest) {
       topicDomain = 'Section 16(2)(c) & NGTP Supplier Default',
       primaryIssue = 'Recovery from recipient under Section 16(2)(c) without pursuing supplier',
       financialYear = '2018-19',
+      customQuery,
       geminiApiKey,
-      documents = []
+      documents = [],
+      existingPrecedents = []
     } = body;
 
     const hasInvoices = (documents as CaseDocument[]).some(d => d.type === 'Invoice');
@@ -25,11 +27,18 @@ export async function POST(req: NextRequest) {
     const hasCaCert = (documents as CaseDocument[]).some(d => d.type === 'CA Certificate');
 
     // 1. Ingest dynamic case laws via Gemini
-    let livePrecedents = await ingestRealTimeNgtpPrecedents(topicDomain, primaryIssue, financialYear, geminiApiKey, documents);
+    let newlyIngested = await ingestRealTimeNgtpPrecedents(
+      topicDomain, 
+      primaryIssue, 
+      financialYear, 
+      geminiApiKey, 
+      documents,
+      customQuery
+    );
     
-    // Fall back to rich benchmark library if needed
-    if (!livePrecedents || livePrecedents.length === 0) {
-      livePrecedents = BENCHMARK_PRECEDENTS.map(p => ({
+    // Fall back or combine with benchmark library if needed
+    if (!newlyIngested || newlyIngested.length === 0) {
+      newlyIngested = BENCHMARK_PRECEDENTS.map(p => ({
         ...p,
         topicDomain,
         evidencesReliedOnByCourt: [
@@ -46,10 +55,24 @@ export async function POST(req: NextRequest) {
       }));
     }
 
-    // 2. Resolve Article 141 Judicial Hierarchy & High Court Conflicts
-    livePrecedents = resolvePrecedentConflicts(livePrecedents, hasBank);
+    // 2. Merge with existing precedents and deduplicate by caseName
+    const combinedMap = new Map<string, PrecedentAnalysis>();
+    for (const p of (newlyIngested || [])) {
+      const key = p.caseName.toLowerCase().replace(/[^a-z0-9]/g, '');
+      combinedMap.set(key, p);
+    }
+    for (const p of (existingPrecedents as PrecedentAnalysis[] || [])) {
+      const key = p.caseName.toLowerCase().replace(/[^a-z0-9]/g, '');
+      if (!combinedMap.has(key)) {
+        combinedMap.set(key, p);
+      }
+    }
+    let allPrecedents = Array.from(combinedMap.values());
 
-    // 3. Calibrate statutory parameters dynamically
+    // 3. Resolve Article 141 Judicial Hierarchy & High Court Conflicts dynamically
+    allPrecedents = resolvePrecedentConflicts(allPrecedents, hasBank);
+
+    // 4. Calibrate statutory parameters dynamically across all ingested precedents
     const calibratedParameters = evaluateStatutoryParameters(
       financialYear,
       primaryIssue,
@@ -58,18 +81,19 @@ export async function POST(req: NextRequest) {
       hasBank,
       hasScn,
       hasCaCert,
-      livePrecedents
+      allPrecedents
     );
 
     return NextResponse.json({
       success: true,
-      topicDomain,
-      ingestedCount: livePrecedents.length,
-      ingestedPrecedents: livePrecedents,
+      topicDomain: customQuery || topicDomain,
+      newlyIngestedCount: newlyIngested.length,
+      totalIngestedCount: allPrecedents.length,
+      ingestedPrecedents: allPrecedents,
       calibratedParameters,
       evidenceAuditSummary: {
-        totalEvidencesRequiredByCourts: livePrecedents.flatMap(p => p.evidencesReliedOnByCourt || []).length,
-        evidencesSatisfiedInPresentCase: livePrecedents.flatMap(p => p.presentCaseEvidenceSatisfying || []).length,
+        totalEvidencesRequiredByCourts: allPrecedents.flatMap(p => p.evidencesReliedOnByCourt || []).length,
+        evidencesSatisfiedInPresentCase: allPrecedents.flatMap(p => p.presentCaseEvidenceSatisfying || []).length,
         criticalEvidentiaryThresholdMet: hasBank && hasInvoices
       }
     });

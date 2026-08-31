@@ -1,4 +1,4 @@
-'use client';
+﻿page_code_continuous = """'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Header } from '../components/Header';
@@ -317,3 +317,9 @@ export default function HomePage() {
     </div>
   );
 }
+"""
+
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_code_continuous)
+
+print("Updated page.tsx with continuous open-ended precedent ingestion handler!")

@@ -1,4 +1,4 @@
-import { 
+﻿code_hierarchy_engine = """import { 
   PrecedentAnalysis, 
   BenchType, 
   Article141Precedence, 
@@ -119,3 +119,9 @@ export function resolvePrecedentConflicts(
     };
   });
 }
+"""
+
+with open("src/service/hierarchy-engine.ts", "w", encoding="utf-8") as f:
+    f.write(code_hierarchy_engine)
+
+print("Updated hierarchy-engine.ts for fully dynamic, open-ended precedent evaluation!")

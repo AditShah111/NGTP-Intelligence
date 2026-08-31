@@ -1,4 +1,6 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+﻿import os
+
+code_gemini_dynamic = """import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ENV } from '../config/env';
 import { PrecedentAnalysis, PrecedentEvidentiaryImpact, CaseDocument, BenchType, Article141Precedence, SlpStatus } from '../types';
 
@@ -52,7 +54,7 @@ export async function ingestRealTimeNgtpPrecedents(
   documents: CaseDocument[] = [],
   customQuery?: string
 ): Promise<PrecedentAnalysis[] | null> {
-  const docSummary = documents.map(d => `${d.name} (${d.type}): ${d.extractedTextSnippet}`).join('\n');
+  const docSummary = documents.map(d => `${d.name} (${d.type}): ${d.extractedTextSnippet}`).join('\\n');
 
   const prompt = `Act as an authoritative Indian GST legal researcher. Ingest and perform a comprehensive judicial research across Indian Supreme Court and ALL High Courts (Calcutta, Madras, Delhi, Bombay, Karnataka, Kerala, Allahabad, Gujarat, Telangana, Punjab & Haryana, Patna, Madhya Pradesh, etc.) for genuine, verifiable case laws on:
 
@@ -138,7 +140,7 @@ Return ONLY valid JSON matching this schema:
   if (!raw) return null;
 
   try {
-    const jsonMatch = raw.match(/\[[\s\S]*\]/);
+    const jsonMatch = raw.match(/\\[[\\s\\S]*\\]/);
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]) as PrecedentAnalysis[];
     }
@@ -191,7 +193,7 @@ Return ONLY a JSON array with schema:
   if (!raw) return null;
 
   try {
-    const jsonMatch = raw.match(/\[[\s\S]*\]/);
+    const jsonMatch = raw.match(/\\[[\\s\\S]*\\]/);
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]);
     }
@@ -200,3 +202,9 @@ Return ONLY a JSON array with schema:
   }
   return null;
 }
+"""
+
+with open("src/service/gemini-client.ts", "w", encoding="utf-8") as f:
+    f.write(code_gemini_dynamic)
+
+print("Updated src/service/gemini-client.ts with open-ended multi-case real-time ingestion!")
