@@ -1,4 +1,4 @@
-import { 
+﻿code_eval = """import { 
   CaseStudy, 
   FinalEvaluatorOutput, 
   Recommendation,
@@ -68,9 +68,9 @@ export async function runComplete13StepEvaluation(
   let redTeamItems = runAdversarialRedTeamAnalysis();
   if (geminiApiKey || process.env.GEMINI_API_KEY) {
     try {
-      const allDocText = documents.map(d => `${d.name}: ${d.extractedTextSnippet}`).join('\n');
+      const allDocText = documents.map(d => `${d.name}: ${d.extractedTextSnippet}`).join('\\n');
       const aiItems = await generateAdversarialRedTeamWithGemini(
-        `${summary}\nUploaded Evidence:\n${allDocText}`, 
+        `${summary}\\nUploaded Evidence:\\n${allDocText}`, 
         primaryIssue, 
         geminiApiKey
       );
@@ -211,3 +211,9 @@ export async function runComplete13StepEvaluation(
     finalOutput
   };
 }
+"""
+
+with open("src/service/evaluator-agent.ts", "w", encoding="utf-8") as f:
+    f.write(code_eval)
+
+print("Updated evaluator-agent.ts with dynamic live precedent research!")

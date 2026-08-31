@@ -1,4 +1,6 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+﻿import os
+
+code_gemini_expanded = """import { GoogleGenerativeAI } from '@google/generative-ai';
 import { ENV } from '../config/env';
 import { PrecedentAnalysis } from '../types';
 
@@ -90,7 +92,7 @@ Return ONLY valid JSON matching this schema:
   if (!raw) return null;
 
   try {
-    const jsonMatch = raw.match(/\[[\s\S]*\]/);
+    const jsonMatch = raw.match(/\\[[\\s\\S]*\\]/);
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]) as PrecedentAnalysis[];
     }
@@ -133,7 +135,7 @@ Return ONLY a JSON array with schema:
   if (!raw) return null;
 
   try {
-    const jsonMatch = raw.match(/\[[\s\S]*\]/);
+    const jsonMatch = raw.match(/\\[[\\s\\S]*\\]/);
     if (jsonMatch) {
       return JSON.parse(jsonMatch[0]);
     }
@@ -142,3 +144,9 @@ Return ONLY a JSON array with schema:
   }
   return null;
 }
+"""
+
+with open("src/service/gemini-client.ts", "w", encoding="utf-8") as f:
+    f.write(code_gemini_expanded)
+
+print("Updated src/service/gemini-client.ts with fetchLatestPrecedentsWithGemini!")
