@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { pool } from '@/repo/db';
+import { pool } from '../../../repo/db';
 
 export async function GET() {
   let dbStatus = 'disconnected';

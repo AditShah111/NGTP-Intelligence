@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { DraftAuditDefect } from '@/types';
+import { DraftAuditDefect } from '../../types';
 import { CheckSquare, AlertTriangle, CheckCircle, ShieldAlert } from 'lucide-react';
 
 interface Step12Props {

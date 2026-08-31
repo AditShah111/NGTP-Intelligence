@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, Download, Copy, Check, FileText } from 'lucide-react';
-import { CaseStudy } from '@/types';
+import { CaseStudy } from '../types';
 
 interface ExportDossierModalProps {
   isOpen: boolean;

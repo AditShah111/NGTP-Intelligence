@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Building2, Calendar, FileSpreadsheet, ShieldAlert, Award, TrendingUp, AlertTriangle } from 'lucide-react';
-import { CaseStudy } from '@/types';
+import { CaseStudy } from '../types';
 
 interface CaseOverviewCardProps {
   activeCase: CaseStudy;

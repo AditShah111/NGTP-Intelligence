@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { PrecedentAnalysis } from '@/types';
+import { PrecedentAnalysis } from '../../types';
 import { BookOpen, Award, CheckCircle2, ShieldCheck, Scale } from 'lucide-react';
 
 interface Step3Props {

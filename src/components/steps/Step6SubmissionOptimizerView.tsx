@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ImprovedSubmissionGround } from '@/types';
+import { ImprovedSubmissionGround } from '../../types';
 import { FileEdit, CheckCircle, ShieldCheck, ArrowRight, AlertTriangle } from 'lucide-react';
 
 interface Step6Props {

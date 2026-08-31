@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ReadinessScoreBreakdown, ViabilityScoreBreakdown } from '@/types';
+import { ReadinessScoreBreakdown, ViabilityScoreBreakdown } from '../../types';
 import { Gauge, Award, TrendingUp, ShieldCheck, CheckCircle2, AlertCircle, ArrowUpRight, Scale, BarChart3 } from 'lucide-react';
 
 interface Step9Props {

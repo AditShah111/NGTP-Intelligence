@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { StatutoryParameter } from '@/types';
+import { StatutoryParameter } from '../../types';
 import { Scale, ShieldCheck, AlertTriangle, XCircle, HelpCircle } from 'lucide-react';
 
 interface Step2Props {

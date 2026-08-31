@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ForwardLitigationDecision } from '@/types';
+import { ForwardLitigationDecision } from '../../types';
 import { Navigation, TrendingUp, ShieldAlert, CheckCircle2, ArrowUpRight } from 'lucide-react';
 
 interface Step11Props {

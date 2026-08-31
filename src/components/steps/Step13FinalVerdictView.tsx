@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FinalEvaluatorOutput } from '@/types';
+import { FinalEvaluatorOutput } from '../../types';
 import { Gavel, Award, ShieldAlert, CheckCircle2, ArrowRight, FileText, AlertTriangle } from 'lucide-react';
 
 interface Step13Props {

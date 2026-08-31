@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
-import { CaseEvaluationRequestSchema } from '@/types';
-import { runComplete13StepEvaluation } from '@/service/evaluator-agent';
-import { saveCase } from '@/repo/case-repo';
+import { CaseEvaluationRequestSchema } from '../../../types';
+import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
+import { saveCase } from '../../../repo/case-repo';
 
 export async function POST(req: Request) {
   try {

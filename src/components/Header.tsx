@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Scale, ShieldAlert, FileText, PlusCircle, RefreshCw, Download, Database, CheckCircle2 } from 'lucide-react';
-import { CaseStudy } from '@/types';
+import { CaseStudy } from '../types';
 
 interface HeaderProps {
   cases: CaseStudy[];

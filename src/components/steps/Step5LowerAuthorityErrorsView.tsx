@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { LowerAuthorityError } from '@/types';
+import { LowerAuthorityError } from '../../types';
 import { AlertOctagon, ShieldAlert, Gavel } from 'lucide-react';
 
 interface Step5Props {

@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, Scale, PlusCircle } from 'lucide-react';
-import { CaseStudy } from '@/types';
+import { CaseStudy } from '../types';
 
 interface NewCaseModalProps {
   isOpen: boolean;

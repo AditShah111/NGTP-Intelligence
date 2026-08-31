@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { AdversarialRedTeamItem } from '@/types';
+import { AdversarialRedTeamItem } from '../../types';
 import { Swords, ShieldAlert, CheckCircle2, XCircle, AlertTriangle, Play, Shield, Flame, RotateCcw } from 'lucide-react';
 
 interface Step7Props {

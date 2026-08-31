@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { X, Upload, FileText, CheckCircle2, AlertTriangle, Trash2, Eye } from 'lucide-react';
-import { CaseDocument, OcrReadability } from '@/types';
+import { CaseDocument, OcrReadability } from '../types';
 
 interface DocumentUploaderModalProps {
   isOpen: boolean;

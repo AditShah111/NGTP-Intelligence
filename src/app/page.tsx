@@ -1,27 +1,27 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Header } from '@/components/Header';
-import { CaseOverviewCard } from '@/components/CaseOverviewCard';
-import { StepProgressNav } from '@/components/StepProgressNav';
-import { DocumentUploaderModal } from '@/components/DocumentUploaderModal';
-import { NewCaseModal } from '@/components/NewCaseModal';
-import { ExportDossierModal } from '@/components/ExportDossierModal';
+import { Header } from '../components/Header';
+import { CaseOverviewCard } from '../components/CaseOverviewCard';
+import { StepProgressNav } from '../components/StepProgressNav';
+import { DocumentUploaderModal } from '../components/DocumentUploaderModal';
+import { NewCaseModal } from '../components/NewCaseModal';
+import { ExportDossierModal } from '../components/ExportDossierModal';
 
-import { Step1FactMatrixView } from '@/components/steps/Step1FactMatrixView';
-import { Step2StatutoryEngineView } from '@/components/steps/Step2StatutoryEngineView';
-import { Step3Step4PrecedentsView } from '@/components/steps/Step3Step4PrecedentsView';
-import { Step5LowerAuthorityErrorsView } from '@/components/steps/Step5LowerAuthorityErrorsView';
-import { Step6SubmissionOptimizerView } from '@/components/steps/Step6SubmissionOptimizerView';
-import { Step7RedTeamBattleView } from '@/components/steps/Step7RedTeamBattleView';
-import { Step8EvidenceGapView } from '@/components/steps/Step8EvidenceGapView';
-import { Step9Step10ScoresView } from '@/components/steps/Step9Step10ScoresView';
-import { Step11ForwardDecisionView } from '@/components/steps/Step11ForwardDecisionView';
-import { Step12DraftAuditView } from '@/components/steps/Step12DraftAuditView';
-import { Step13FinalVerdictView } from '@/components/steps/Step13FinalVerdictView';
+import { Step1FactMatrixView } from '../components/steps/Step1FactMatrixView';
+import { Step2StatutoryEngineView } from '../components/steps/Step2StatutoryEngineView';
+import { Step3Step4PrecedentsView } from '../components/steps/Step3Step4PrecedentsView';
+import { Step5LowerAuthorityErrorsView } from '../components/steps/Step5LowerAuthorityErrorsView';
+import { Step6SubmissionOptimizerView } from '../components/steps/Step6SubmissionOptimizerView';
+import { Step7RedTeamBattleView } from '../components/steps/Step7RedTeamBattleView';
+import { Step8EvidenceGapView } from '../components/steps/Step8EvidenceGapView';
+import { Step9Step10ScoresView } from '../components/steps/Step9Step10ScoresView';
+import { Step11ForwardDecisionView } from '../components/steps/Step11ForwardDecisionView';
+import { Step12DraftAuditView } from '../components/steps/Step12DraftAuditView';
+import { Step13FinalVerdictView } from '../components/steps/Step13FinalVerdictView';
 
-import { CaseStudy, CaseDocument } from '@/types';
-import { BENCHMARK_CASES } from '@/repo/benchmark-data';
+import { CaseStudy, CaseDocument } from '../types';
+import { BENCHMARK_CASES } from '../repo/benchmark-data';
 import { Scale, Loader2, Sparkles } from 'lucide-react';
 
 export default function HomePage() {

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { FactMatrixItem } from '@/types';
+import { FactMatrixItem } from '../../types';
 import { Table, CheckCircle, AlertCircle, HelpCircle, FileText, Check, AlertTriangle } from 'lucide-react';
 
 interface Step1Props {

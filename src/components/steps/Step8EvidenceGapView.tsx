@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { EvidenceGapItem } from '@/types';
+import { EvidenceGapItem } from '../../types';
 import { Search, AlertCircle, FilePlus2, CheckCircle2 } from 'lucide-react';
 
 interface Step8Props {
