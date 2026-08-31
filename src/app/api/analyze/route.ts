@@ -10,7 +10,7 @@ export async function POST(req: Request) {
     const body = await req.json();
     const parsed = CaseEvaluationRequestSchema.parse(body);
 
-    const evaluated = runComplete13StepEvaluation(
+    const evaluated = await runComplete13StepEvaluation(
       parsed.title,
       parsed.taxpayerName,
       parsed.gstin,
@@ -19,7 +19,8 @@ export async function POST(req: Request) {
       parsed.noticeType,
       parsed.primaryIssue,
       parsed.caseSummary,
-      parsed.documentTexts || []
+      parsed.documentTexts || [],
+      parsed.geminiApiKey
     );
 
     await saveCase(evaluated);

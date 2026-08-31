@@ -1,4 +1,6 @@
-import { 
+﻿import os
+
+code_evaluator = """import { 
   CaseStudy, 
   FinalEvaluatorOutput, 
   Recommendation 
@@ -176,3 +178,9 @@ export async function runComplete13StepEvaluation(
     finalOutput
   };
 }
+"""
+
+with open("src/service/evaluator-agent.ts", "w", encoding="utf-8") as f:
+    f.write(code_evaluator)
+
+print("Updated evaluator-agent.ts to use Gemini when available!")

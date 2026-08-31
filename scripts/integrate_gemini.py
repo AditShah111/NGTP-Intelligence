@@ -1,4 +1,15 @@
-import { z } from 'zod';
+﻿import os
+
+code_env = """export const ENV = {
+  DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:Moksha@591$%@db.wvgomkamelpziuwdqgbm.supabase.co:5432/postgres',
+  GEMINI_API_KEY: process.env.GEMINI_API_KEY || '',
+  PORT: parseInt(process.env.PORT || '10000', 10),
+  NODE_ENV: process.env.NODE_ENV || 'development',
+  IS_PRODUCTION: process.env.NODE_ENV === 'production',
+};
+"""
+
+code_types = """import { z } from 'zod';
 
 export type EvidenceStrength = 
   | 'Established' 
@@ -254,3 +265,11 @@ export const CaseEvaluationRequestSchema = z.object({
 });
 
 export type CaseEvaluationRequest = z.infer<typeof CaseEvaluationRequestSchema>;
+"""
+
+with open("src/config/env.ts", "w", encoding="utf-8") as f:
+    f.write(code_env)
+with open("src/types/index.ts", "w", encoding="utf-8") as f:
+    f.write(code_types)
+
+print("Updated env.ts and types/index.ts with Gemini integration support!")

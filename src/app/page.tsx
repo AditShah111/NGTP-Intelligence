@@ -74,11 +74,13 @@ export default function HomePage() {
   }) => {
     setIsLoading(true);
     try {
+      const geminiApiKey = typeof window !== 'undefined' ? (localStorage.getItem('ngtp_gemini_api_key') || undefined) : undefined;
       const res = await fetch('/api/analyze', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
+          geminiApiKey,
           documentTexts: []
         })
       });

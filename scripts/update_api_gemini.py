@@ -1,4 +1,46 @@
-import { NextResponse } from 'next/server';
+﻿import os
+
+code_analyze = """import { NextResponse } from 'next/server';
+import { CaseEvaluationRequestSchema } from '../../../types';
+import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
+import { saveCase } from '../../../repo/case-repo';
+
+export const dynamic = 'force-dynamic';
+
+export async function POST(req: Request) {
+  try {
+    const body = await req.json();
+    const parsed = CaseEvaluationRequestSchema.parse(body);
+
+    const evaluated = await runComplete13StepEvaluation(
+      parsed.title,
+      parsed.taxpayerName,
+      parsed.gstin,
+      parsed.financialYear,
+      parsed.disputedAmount,
+      parsed.noticeType,
+      parsed.primaryIssue,
+      parsed.caseSummary,
+      parsed.documentTexts || [],
+      parsed.geminiApiKey
+    );
+
+    await saveCase(evaluated);
+
+    return NextResponse.json({
+      success: true,
+      evaluatedCase: evaluated
+    });
+  } catch (err: any) {
+    return NextResponse.json({
+      success: false,
+      error: err.message
+    }, { status: 400 });
+  }
+}
+"""
+
+code_cases = """import { NextResponse } from 'next/server';
 import { getAllCases, saveCase, getCaseById } from '../../../repo/case-repo';
 import { CaseEvaluationRequestSchema } from '../../../types';
 import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
@@ -41,3 +83,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ success: false, error: err.message }, { status: 400 });
   }
 }
+"""
+
+with open("src/app/api/analyze/route.ts", "w", encoding="utf-8") as f:
+    f.write(code_analyze)
+with open("src/app/api/cases/route.ts", "w", encoding="utf-8") as f:
+    f.write(code_cases)
+
+print("Updated analyze and cases routes!")

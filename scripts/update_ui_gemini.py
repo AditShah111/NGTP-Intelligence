@@ -1,4 +1,6 @@
-'use client';
+﻿import os
+
+code_header = """'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Scale, ShieldAlert, FileText, PlusCircle, RefreshCw, Download, Database, Key, Sparkles, Check, X } from 'lucide-react';
@@ -201,3 +203,9 @@ export const Header: React.FC<HeaderProps> = ({
     </>
   );
 };
+"""
+
+with open("src/components/Header.tsx", "w", encoding="utf-8") as f:
+    f.write(code_header)
+
+print("Updated Header.tsx with Gemini Key configuration modal!")
