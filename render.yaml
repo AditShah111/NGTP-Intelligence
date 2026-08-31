@@ -1,11 +1,12 @@
-services:
+﻿services:
   - type: web
     name: ngtp-litigation-engine
     env: node
-    plan: starter
+    plan: free
     region: singapore
     buildCommand: npm install && npm run build
     startCommand: npm start
+    healthCheckPath: /api/health
     envVars:
       - key: DATABASE_URL
         value: postgresql://postgres:Moksha@591$%@db.wvgomkamelpziuwdqgbm.supabase.co:5432/postgres
