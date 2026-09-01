@@ -1,4 +1,4 @@
-'use client';
+﻿page_code_streamlined = """'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '../components/Header';
@@ -373,3 +373,9 @@ export default function HomePage() {
     </div>
   );
 }
+"""
+
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_code_streamlined)
+
+print("Updated page.tsx with single-screen executive UI and background execution!")
