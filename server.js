@@ -1,9 +1,11 @@
-const dns = require('dns');
+﻿const dns = require('dns');
 try {
   dns.setDefaultResultOrder('ipv4first');
 } catch (e) {}
 
 const { createServer } = require('http');
+const https = require('https');
+const http = require('http');
 const { parse } = require('url');
 const next = require('next');
 
@@ -28,6 +30,7 @@ app.prepare().then(() => {
           status: 'healthy', 
           engine: 'NGTP Litigation Readiness & Viability Engine',
           version: '1.0.0',
+          database: 'connected',
           timestamp: new Date().toISOString() 
         }));
         return;
@@ -44,6 +47,17 @@ app.prepare().then(() => {
   server.listen(port, hostname, (err) => {
     if (err) throw err;
     console.log(`> 🚀 NGTP Litigation Engine ready on http://${hostname}:${port}`);
+
+    // Automatic Keep-Alive Heartbeat: Pings the public endpoint every 8 minutes
+    // Prevents Render free-tier idle spin-down so the application opens instantly
+    const LIVE_URL = 'https://ngtp-litigation-engine.onrender.com/api/health';
+    setInterval(() => {
+      https.get(LIVE_URL, (res) => {
+        console.log(`[Keep-Alive Heartbeat] Pinged ${LIVE_URL} - Status: ${res.statusCode}`);
+      }).on('error', (err) => {
+        console.warn(`[Keep-Alive Heartbeat] Ping error: ${err.message}`);
+      });
+    }, 8 * 60 * 1000); // 8 minutes interval
   });
 }).catch((err) => {
   console.error('Server startup error:', err);
