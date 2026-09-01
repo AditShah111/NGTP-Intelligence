@@ -1,4 +1,4 @@
-'use client';
+﻿page_code_safe = """'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '../components/Header';
@@ -387,3 +387,9 @@ export default function HomePage() {
     </div>
   );
 }
+"""
+
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_code_safe)
+
+print("Updated page.tsx with strict 8-second timeout guard!")
