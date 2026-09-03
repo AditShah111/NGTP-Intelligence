@@ -1,8 +1,7 @@
-'use client';
+﻿'use client';
 
-import React, { useState, useRef } from 'react';
-import { X, Scale, PlusCircle, Upload, FileText, AlertTriangle, CheckCircle2, Loader2, Plus, Trash2 } from 'lucide-react';
-import { CaseDocument } from '../types';
+import React, { useState } from 'react';
+import { X, Scale, CheckCircle2 } from 'lucide-react';
 
 interface NewCaseModalProps {
   isOpen: boolean;
@@ -16,7 +15,6 @@ interface NewCaseModalProps {
     noticeType: 'SCN / DRC-01' | 'Order-in-Original / DRC-07' | 'First Appeal / APL-01' | 'High Court Writ Petition';
     primaryIssue: string;
     caseSummary: string;
-    documents: CaseDocument[];
   }) => void;
 }
 
@@ -33,46 +31,8 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
   const [noticeType, setNoticeType] = useState<'SCN / DRC-01' | 'Order-in-Original / DRC-07' | 'First Appeal / APL-01' | 'High Court Writ Petition'>('Order-in-Original / DRC-07');
   const [primaryIssue, setPrimaryIssue] = useState('Section 16(2)(c) GSTR-2A vs 3B mismatch without action on supplier');
   const [caseSummary, setCaseSummary] = useState('');
-  
-  const [attachedDocs, setAttachedDocs] = useState<CaseDocument[]>([]);
-  const [selectedDocType, setSelectedDocType] = useState<CaseDocument['type']>('Invoice');
-  const [isExtracting, setIsExtracting] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   if (!isOpen) return null;
-
-  const handleFileUpload = async (files: FileList | null) => {
-    if (!files || files.length === 0) return;
-    setIsExtracting(true);
-    try {
-      for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        let text = '';
-        if (file.type.includes('text') || file.name.endsWith('.txt') || file.name.endsWith('.csv')) {
-          text = await file.text();
-        } else {
-          text = `Attached file ${file.name} (Size: ${(file.size / 1024).toFixed(1)} KB)`;
-        }
-
-        const newDoc: CaseDocument = {
-          id: `doc-${Date.now()}-${i}`,
-          name: file.name,
-          type: selectedDocType,
-          fileSize: `${(file.size / 1024).toFixed(1)} KB`,
-          uploadedAt: new Date().toISOString().split('T')[0],
-          ocrReadability: 'Clearly readable text',
-          extractedTextSnippet: text.slice(0, 800)
-        };
-
-        setAttachedDocs(prev => [...prev, newDoc]);
-      }
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setIsExtracting(false);
-      if (fileInputRef.current) fileInputRef.current.value = '';
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,8 +46,7 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
       disputedAmount: disputedAmount || 'INR 0 (Unspecified)',
       noticeType,
       primaryIssue,
-      caseSummary: caseSummary || `${title} - Assessment for ${taxpayerName} (FY ${financialYear}).`,
-      documents: attachedDocs
+      caseSummary: caseSummary || `${title} - NGTP Assessment for ${taxpayerName} (FY ${financialYear}).`
     });
 
     onClose();
@@ -95,7 +54,7 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 overflow-y-auto">
-      <div className="bg-white border border-beige-300 rounded-2xl w-full max-w-3xl shadow-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto">
+      <div className="bg-white border border-beige-300 rounded-2xl w-full max-w-2xl shadow-2xl p-6 relative my-8 max-h-[90vh] overflow-y-auto">
         <button
           onClick={onClose}
           className="absolute top-5 right-5 text-slate-400 hover:text-slate-700 transition-colors"
@@ -108,14 +67,14 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
             <Scale className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="text-lg font-serif font-bold text-slate-900">Create Rigorous Legal Assessment</h3>
-            <p className="text-xs text-slate-500">Initialize a 13-step statutory evaluation. Upload real evidence to avoid score disqualification.</p>
+            <h3 className="text-lg font-serif font-bold text-slate-900">Create New NGTP Assessment</h3>
+            <p className="text-xs text-slate-500">Initialize matter master data. Evidence & submissions are attached in the main workspace.</p>
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3.5 text-xs">
+        <form onSubmit={handleSubmit} className="space-y-4 text-xs">
           <div>
-            <label className="block text-slate-700 mb-1 font-semibold">Matter / Case Title</label>
+            <label className="block text-slate-700 mb-1 font-semibold">Matter / Assessment Title</label>
             <input
               type="text"
               value={title}
@@ -194,7 +153,7 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-slate-700 mb-1 font-semibold">Primary Legal Issue</label>
+            <label className="block text-slate-700 mb-1 font-semibold">Primary NGTP Legal Issue</label>
             <input
               type="text"
               value={primaryIssue}
@@ -205,81 +164,18 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-slate-700 mb-1 font-semibold">Factual Summary / Ground Narrative</label>
+            <label className="block text-slate-700 mb-1 font-semibold">Matter Brief / Ground Narrative</label>
             <textarea
-              rows={2}
+              rows={3}
               value={caseSummary}
               onChange={(e) => setCaseSummary(e.target.value)}
-              placeholder="Brief details of the transactions, supplier status, and impugned departmental demand..."
+              placeholder="Brief summary of the matter, supplier details, or departmental allegations..."
               className="w-full bg-beige-50 border border-beige-300 rounded-lg p-3 text-slate-900 focus:outline-none focus:border-amber-600 leading-relaxed"
             />
           </div>
 
-          {/* Document Upload Dropzone */}
-          <div className="pt-2 border-t border-beige-200">
-            <div className="flex items-center justify-between mb-1.5">
-              <label className="block text-amber-900 font-semibold">
-                Attach Evidence Files:
-              </label>
-              <select
-                value={selectedDocType}
-                onChange={(e) => setSelectedDocType(e.target.value as any)}
-                className="bg-beige-50 border border-beige-300 rounded px-2 py-1 text-[11px] font-semibold text-slate-800"
-              >
-                <option value="Invoice">Tax Invoices</option>
-                <option value="Bank Statement">Bank Statement / RTGS Voucher</option>
-                <option value="E-Way Bill">E-Way Bills / Transit</option>
-                <option value="Statement of Facts">Statement of Facts (SOF)</option>
-                <option value="Grounds of Appeal">Grounds of Appeal / Draft Reply</option>
-                <option value="SCN">SCN / DRC-01 Notice</option>
-                <option value="DRC-07">Order-in-Original (DRC-07)</option>
-                <option value="CA Certificate">Circular 183 CA Certificate</option>
-              </select>
-            </div>
-
-            <div
-              onClick={() => fileInputRef.current?.click()}
-              className="border-2 border-dashed border-beige-300 hover:border-amber-600 bg-beige-50 p-4 rounded-xl text-center cursor-pointer transition-all"
-            >
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={(e) => handleFileUpload(e.target.files)}
-                multiple
-                accept=".pdf,.png,.jpg,.jpeg,.txt,.csv,.json,.doc,.docx"
-                className="hidden"
-              />
-              {isExtracting ? (
-                <div className="flex items-center justify-center gap-2 text-amber-700">
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                  <span className="font-semibold">Attaching document...</span>
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center space-y-1">
-                  <Upload className="w-5 h-5 text-amber-700" />
-                  <span className="text-slate-800 font-medium">Click to attach as {selectedDocType}</span>
-                  <span className="text-[10px] text-slate-500">Attach Invoices + Bank Statements to unlock Suncraft scores</span>
-                </div>
-              )}
-            </div>
-
-            {/* Attached files preview */}
-            {attachedDocs.length > 0 && (
-              <div className="mt-2 space-y-1.5 max-h-32 overflow-y-auto">
-                {attachedDocs.map((doc, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-2 rounded-lg bg-beige-50 border border-beige-200 text-[11px]">
-                    <span className="text-slate-800 font-mono font-semibold">{doc.name} ({doc.type})</span>
-                    <button
-                      type="button"
-                      onClick={() => setAttachedDocs(prev => prev.filter((_, i) => i !== idx))}
-                      className="text-slate-400 hover:text-rose-600"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+          <div className="p-3 rounded-xl bg-amber-50/70 border border-amber-200/80 text-[11px] text-amber-900 font-sans leading-relaxed">
+            💡 <strong>Next Step:</strong> Submitting this form initializes your master data on the workspace. You will attach written submissions and documentary evidence on the main screen, then run the 13-step evaluation once with full evidence.
           </div>
 
           <div className="flex justify-end gap-2 pt-3 border-t border-beige-200">
@@ -292,10 +188,10 @@ export const NewCaseModal: React.FC<NewCaseModalProps> = ({
             </button>
             <button
               type="submit"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-lg bg-amber-600 hover:bg-amber-700 text-white font-semibold transition-colors shadow-sm"
+              className="flex items-center gap-1.5 px-5 py-2 rounded-lg bg-slate-900 hover:bg-slate-800 text-white font-semibold transition-colors shadow-sm"
             >
-              <PlusCircle className="w-4 h-4" />
-              <span>Run Strict 13-Step Evaluation</span>
+              <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+              <span>Create Assessment Workspace</span>
             </button>
           </div>
         </form>

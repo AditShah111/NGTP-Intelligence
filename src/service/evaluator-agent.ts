@@ -73,8 +73,14 @@ export async function runComplete13StepEvaluation(
   // Step 5: Lower Authority Errors
   const lowerAuthorityErrors = analyzeLowerAuthorityErrors(noticeType, primaryIssue);
 
-  // Step 6: Submission Improvement
-  const improvedSubmissions = improveSubmissions(primaryIssue);
+  // Step 6: Submission Improvement (Dynamically synthesizing all ingested High Court & Supreme Court precedents)
+  const improvedSubmissions = improveSubmissions(
+    primaryIssue,
+    precedents,
+    statutoryParameters,
+    hasTransit,
+    hasBank
+  );
 
   // Step 7: Adversarial Red-Team
   let redTeamItems = runAdversarialRedTeamAnalysis();

@@ -214,8 +214,8 @@ export default function HomePage() {
     }
   };
 
-  // Create new case from modal
-  const handleCreateNewCaseFromModal = async (formData: {
+  // Create new case from modal (Master Data Only - Intelligence runs only once from the main UI)
+  const handleCreateNewCaseFromModal = (formData: {
     title: string;
     taxpayerName: string;
     gstin: string;
@@ -224,49 +224,20 @@ export default function HomePage() {
     noticeType: any;
     primaryIssue: string;
     caseSummary: string;
-    documents?: CaseDocument[];
   }) => {
-    setIsLoading(true);
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
-
-    try {
-      const geminiApiKey = typeof window !== 'undefined' ? (localStorage.getItem('ngtp_gemini_api_key') || undefined) : undefined;
-      const res = await fetch('/api/analyze', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        signal: controller.signal,
-        body: JSON.stringify({
-          ...formData,
-          geminiApiKey,
-          documents: formData.documents || []
-        })
-      });
-
-      clearTimeout(timeoutId);
-
-      if (res.ok) {
-        const data = await res.json();
-        if (data.evaluatedCase) {
-          setActiveCase(data.evaluatedCase);
-          setTitle(data.evaluatedCase.title);
-          setTaxpayerName(data.evaluatedCase.taxpayerName);
-          setGstin(data.evaluatedCase.gstin);
-          setFinancialYear(data.evaluatedCase.financialYear);
-          setDisputedAmount(data.evaluatedCase.disputedAmount);
-          setNoticeType(data.evaluatedCase.noticeType as any);
-          setPrimaryIssue(data.evaluatedCase.primaryIssue);
-          setWrittenSubmission(data.evaluatedCase.summary);
-          setUploadedDocuments(data.evaluatedCase.documents || []);
-          setCases(prev => [data.evaluatedCase, ...prev.filter(c => c.id !== data.evaluatedCase.id)]);
-        }
-      }
-    } catch (err) {
-      console.error('Analysis failed:', err);
-    } finally {
-      clearTimeout(timeoutId);
-      setIsLoading(false);
-    }
+    setActiveCase(null);
+    setScopeRejection(null);
+    setTitle(formData.title);
+    setTaxpayerName(formData.taxpayerName);
+    setGstin(formData.gstin);
+    setFinancialYear(formData.financialYear);
+    setDisputedAmount(formData.disputedAmount);
+    setNoticeType(formData.noticeType);
+    setPrimaryIssue(formData.primaryIssue);
+    setWrittenSubmission(formData.caseSummary || '');
+    setUploadedDocuments([]);
+    setIsNewCaseOpen(false);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   // Quick Ingest File Drag-and-Drop (Evidence Tab)
