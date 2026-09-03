@@ -1,4 +1,4 @@
-'use client';
+﻿summary_with_13_steps = """'use client';
 
 import React, { useState } from 'react';
 import { CaseStudy } from '../types';
@@ -431,3 +431,9 @@ export const ExecutiveSummaryView: React.FC<Props> = ({ caseStudy, onOpenExportM
     </div>
   );
 };
+"""
+
+with open("src/components/ExecutiveSummaryView.tsx", "w", encoding="utf-8") as f:
+    f.write(summary_with_13_steps)
+
+print("Updated ExecutiveSummaryView.tsx with 13-step verification trace!")
