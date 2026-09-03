@@ -9,6 +9,7 @@ import { ExportDossierModal } from '../components/ExportDossierModal';
 
 import { CaseStudy, CaseDocument } from '../types';
 import { BENCHMARK_CASES } from '../repo/benchmark-data';
+import { validateNGTPScope, NGTPGatekeeperResult } from '../service/ngtp-gatekeeper';
 import { 
   Scale, 
   Loader2, 
@@ -33,6 +34,7 @@ import {
 export default function HomePage() {
   const [cases, setCases] = useState<CaseStudy[]>([]);
   const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
+  const [scopeRejection, setScopeRejection] = useState<NGTPGatekeeperResult | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDbConnected, setIsDbConnected] = useState<boolean>(true);
 
@@ -64,6 +66,12 @@ export default function HomePage() {
   const [isNewCaseOpen, setIsNewCaseOpen] = useState(false);
   const [isHistoryDrawerOpen, setIsHistoryDrawerOpen] = useState(false);
   const [isExportOpen, setIsExportOpen] = useState(false);
+  // Auto-scroll to top when activeCase verdict is evaluated
+  useEffect(() => {
+    if (activeCase) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [activeCase]);
 
   // Fetch past cases & health check on mount
   useEffect(() => {
@@ -99,6 +107,7 @@ export default function HomePage() {
   // Reset to 100% clean pristine workspace
   const handleResetWorkspace = () => {
     setActiveCase(null);
+    setScopeRejection(null);
     setTitle('');
     setTaxpayerName('');
     setGstin('');
@@ -119,9 +128,7 @@ export default function HomePage() {
 
   // Run Legal Evaluation Engine
   const handleRunEvaluation = async () => {
-    setIsLoading(true);
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    setScopeRejection(null);
 
     const matterTitle = title.trim() || `${taxpayerName || 'Matter'} - FY ${financialYear}`;
     const taxpayer = taxpayerName.trim() || 'Taxpayer Entity';
@@ -145,6 +152,19 @@ export default function HomePage() {
       allDocs = [submissionDoc, ...allDocs.filter(d => !d.id.startsWith('doc-sub-'))];
     }
 
+    // Client-side Pre-Flight NGTP Scope Check
+    const preflightScope = validateNGTPScope(matterTitle, primaryIssue, summary, noticeType, allDocs);
+    if (!preflightScope.isNGTP) {
+      setActiveCase(null);
+      setScopeRejection(preflightScope);
+      setIsLoading(false);
+      return;
+    }
+
+    setIsLoading(true);
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000);
+
     try {
       const geminiApiKey = typeof window !== 'undefined' ? (localStorage.getItem('ngtp_gemini_api_key') || undefined) : undefined;
       const res = await fetch('/api/analyze', {
@@ -167,12 +187,24 @@ export default function HomePage() {
 
       clearTimeout(timeoutId);
 
-      if (res.ok) {
-        const data = await res.json();
-        if (data.evaluatedCase) {
-          setActiveCase(data.evaluatedCase);
-          setCases(prev => [data.evaluatedCase, ...prev.filter(c => c.id !== data.evaluatedCase.id)]);
-        }
+      const data = await res.json();
+      if (res.status === 422 || data.notApplicable) {
+        setActiveCase(null);
+        setScopeRejection({
+          isNGTP: false,
+          detectedDomain: data.detectedDomain || 'Non-NGTP Domain',
+          confidenceScore: 95,
+          rejectionReason: data.rejectionReason || 'Project is not within NGTP statutory scope.',
+          matchedKeywords: [],
+          allowedTopics: data.allowedTopics || []
+        });
+        return;
+      }
+
+      if (res.ok && data.evaluatedCase) {
+        setScopeRejection(null);
+        setActiveCase(data.evaluatedCase);
+        setCases(prev => [data.evaluatedCase, ...prev.filter(c => c.id !== data.evaluatedCase.id)]);
       }
     } catch (err: any) {
       console.warn('Evaluation response:', err.message);
@@ -366,7 +398,17 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* 1. CLEAN WORKSPACE: Ingestion & Assessment Form */}
+                {/* 1. EXECUTIVE VERDICT & LITIGATION READINESS OUTPUT (Rendered at top when evaluated) */}
+        {activeCase && (
+          <div className="space-y-4 animate-fade-in">
+            <ExecutiveSummaryView
+              caseStudy={activeCase}
+              onOpenExportModal={() => setIsExportOpen(true)}
+            />
+          </div>
+        )}
+
+        {/* 2. MATTER PARTICULARS & EVIDENCE INGESTION WORKSPACE */}
         <div className="bg-white border border-beige-200 rounded-2xl p-6 sm:p-7 shadow-sm">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-beige-200">
             <div>
@@ -374,7 +416,7 @@ export default function HomePage() {
                 {activeCase ? 'Active Matter Assessment' : 'Matter Particulars & Ingestion'}
               </div>
               <h2 className="text-lg sm:text-xl font-serif font-bold text-slate-900">
-                {activeCase ? activeCase.title : 'Matter Assessment Workspace'}
+                {activeCase ? 'Modify Matter Particulars & Evidence' : 'Matter Assessment Workspace'}
               </h2>
             </div>
 
@@ -651,13 +693,74 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* 2. EXECUTIVE VERDICT & SUMMARY (Appears when activeCase is evaluated) */}
-        {activeCase && (
-          <ExecutiveSummaryView
-            caseStudy={activeCase}
-            onOpenExportModal={() => setIsExportOpen(true)}
-          />
+        
+        {/* NON-NGTP SCOPE REJECTION BANNER */}
+        {scopeRejection && (
+          <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-6 sm:p-7 shadow-md animate-fade-in space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-rose-100 border border-rose-200 flex items-center justify-center flex-shrink-0 text-rose-700 font-bold text-lg">
+                  ⛔
+                </div>
+                <div>
+                  <span className="text-[11px] font-mono uppercase font-bold text-rose-800 tracking-wider">
+                    Execution Halted &bull; Statutory Scope Filter
+                  </span>
+                  <h3 className="text-lg font-serif font-bold text-slate-900">
+                    NOT APPLICABLE: Non-NGTP Matter Detected
+                  </h3>
+                </div>
+              </div>
+              <button
+                onClick={() => setScopeRejection(null)}
+                className="text-slate-400 hover:text-slate-700 p-1"
+                title="Dismiss"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white border border-rose-200 space-y-2">
+              <div className="text-xs text-slate-800 font-sans leading-relaxed">
+                <strong className="text-rose-900">Detected Subject Domain:</strong>{' '}
+                <span className="font-mono font-semibold px-2 py-0.5 rounded bg-rose-100 text-rose-900">
+                  {scopeRejection.detectedDomain}
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">
+                {scopeRejection.rejectionReason}
+              </p>
+            </div>
+
+            <div className="pt-1">
+              <span className="text-[11px] font-mono font-bold text-slate-700 uppercase block mb-2">
+                Permitted NGTP Disputes for this Engine:
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                {scopeRejection.allowedTopics?.map((topic, i) => (
+                  <div key={i} className="flex items-center gap-2 p-2 rounded-lg bg-white/80 border border-rose-100 text-slate-700">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                    <span>{topic}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={() => {
+                  setScopeRejection(null);
+                  handleResetWorkspace();
+                }}
+                className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all"
+              >
+                Reset to Clean NGTP Assessment
+              </button>
+            </div>
+          </div>
         )}
+
+
       </main>
 
       {/* Clean Footer */}

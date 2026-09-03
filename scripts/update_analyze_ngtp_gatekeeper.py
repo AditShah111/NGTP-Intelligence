@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿code_analyze_route = """import { NextResponse } from 'next/server';
 import { CaseEvaluationRequestSchema, CaseDocument } from '../../../types';
 import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
 import { saveCase } from '../../../repo/case-repo';
@@ -59,3 +59,9 @@ export async function POST(req: Request) {
     }, { status: 400 });
   }
 }
+"""
+
+with open("src/app/api/analyze/route.ts", "w", encoding="utf-8") as f:
+    f.write(code_analyze_route)
+
+print("Updated src/app/api/analyze/route.ts with NGTP scope validation!")

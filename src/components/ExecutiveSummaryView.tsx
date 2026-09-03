@@ -101,19 +101,27 @@ export const ExecutiveSummaryView: React.FC<Props> = ({ caseStudy, onOpenExportM
             </div>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="text-center p-3 sm:p-4 rounded-xl bg-beige-50 border border-beige-200 min-w-[120px]">
+          <div className="flex items-center gap-3 flex-wrap">
+            <div className="text-center p-3 sm:p-4 rounded-xl bg-beige-50 border border-beige-200 min-w-[110px]">
               <div className="text-[11px] font-mono text-slate-500 uppercase">Readiness Score</div>
               <div className="text-2xl sm:text-3xl font-mono font-bold text-slate-900 mt-0.5">
                 {readinessScore.totalScore}<span className="text-sm text-slate-400">/100</span>
               </div>
             </div>
-            <div className="text-center p-3 sm:p-4 rounded-xl bg-beige-50 border border-beige-200 min-w-[120px]">
+            <div className="text-center p-3 sm:p-4 rounded-xl bg-beige-50 border border-beige-200 min-w-[110px]">
               <div className="text-[11px] font-mono text-slate-500 uppercase">Viability Score</div>
               <div className="text-2xl sm:text-3xl font-mono font-bold text-amber-700 mt-0.5">
                 {viabilityScore.totalScore}<span className="text-sm text-slate-400">/100</span>
               </div>
             </div>
+            <button
+              onClick={onOpenExportModal}
+              className="flex items-center gap-2 px-5 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-all whitespace-nowrap self-stretch sm:self-auto justify-center"
+              title="Export complete structured litigation dossier"
+            >
+              <Download className="w-4 h-4 text-amber-400" />
+              <span>Export Dossier</span>
+            </button>
           </div>
         </div>
 

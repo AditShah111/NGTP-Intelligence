@@ -67,7 +67,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <h1 className="text-base font-serif font-bold text-slate-900 tracking-tight leading-tight">
                   NGTP <span className="text-amber-800 font-sans font-semibold text-[11px] px-2 py-0.5 rounded-full bg-amber-100/80 border border-amber-200">LITIGATION ENGINE</span>
                 </h1>
-                <p className="text-[11px] text-slate-500 font-sans">Automated Evidence Audit & Section 16(2)(c) Judicial Intelligence</p>
+                <p className="text-[11px] text-slate-500 font-sans">Exclusively for Non-Genuine Taxpayer (NGTP) & Section 16(2)(c) Defense</p>
               </div>
             </div>
 
