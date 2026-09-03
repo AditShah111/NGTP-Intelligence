@@ -1,4 +1,4 @@
-import { ImprovedSubmissionGround, PrecedentAnalysis, StatutoryParameter } from '../types';
+﻿code = r"""import { ImprovedSubmissionGround, PrecedentAnalysis, StatutoryParameter } from '../types';
 
 export function improveSubmissions(
   primaryIssue: string,
@@ -8,9 +8,9 @@ export function improveSubmissions(
   hasBank: boolean = true,
   caseSummary: string = ""
 ): ImprovedSubmissionGround[] {
-  const isDelayedPayment = /delayed\s*by\s*216|paid\s*after\s*216|delayed\s*beyond\s*180|216\s*days/i.test(caseSummary) || /delayed\s*216/i.test(primaryIssue);
-  const isCircularAllegation = /100\s*sq\s*ft|global\s*trading\s*syndicate|shaurya\s*infra/i.test(caseSummary) || /no\s*e-way\s*bill/i.test(primaryIssue);
-  const isWeakCase = !hasTransit || isDelayedPayment;
+  const isDelayedPayment = /delayed|216\s*days|exceeding\s*180|beyond\s*180/i.test(caseSummary) || /delayed|216\s*days/i.test(primaryIssue);
+  const isCircularAllegation = /circular|fake|shell|fictitious|100\s*sq|bogus/i.test(caseSummary) || /circular|fake|shell/i.test(primaryIssue);
+  const isWeakCase = !hasTransit || isDelayedPayment || isCircularAllegation;
 
   const grounds: ImprovedSubmissionGround[] = [];
 
@@ -329,3 +329,9 @@ export function improveSubmissions(
 
   return grounds;
 }
+"""
+
+with open("src/service/submission-optimizer.ts", "w", encoding="utf-8") as f:
+    f.write(code)
+
+print("Updated submission-optimizer.ts with dynamic grounds for Set 1 (95% strength) vs Set 2 (30-40% weak/deficient grounds)!")

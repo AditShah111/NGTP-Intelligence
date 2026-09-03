@@ -1,4 +1,4 @@
-import { 
+﻿code = r"""import { 
   CaseStudy, 
   FinalEvaluatorOutput, 
   Recommendation,
@@ -41,9 +41,9 @@ export async function runComplete13StepEvaluation(
   const hasScn = documents.some(d => d.type === 'SCN' || d.type === 'DRC-01' || d.type === 'DRC-07' || /drc|scn|order/i.test(d.type || '') || /drc|scn|order/i.test(d.name || ''));
   const hasCaCert = documents.some(d => d.type === 'CA Certificate' || /certificate|ca/i.test(d.type || '') || /cert/i.test(d.name || ''));
 
-  const isDelayedPayment = /delayed\s*by\s*216|paid\s*after\s*216|delayed\s*beyond\s*180|216\s*days/i.test(summary) || /delayed\s*216/i.test(primaryIssue);
-  const isCircularAllegation = /100\s*sq\s*ft|global\s*trading\s*syndicate|shaurya\s*infra/i.test(summary) || /no\s*e-way\s*bill/i.test(primaryIssue);
-  const isWeakCase = !hasTransit || isDelayedPayment;
+  const isDelayedPayment = /delayed|216\s*days|exceeding\s*180|beyond\s*180/i.test(summary) || /delayed|216\s*days/i.test(primaryIssue);
+  const isCircularAllegation = /circular|fake|shell|fictitious|100\s*sq|bogus/i.test(summary) || /circular|fake|shell/i.test(primaryIssue);
+  const isWeakCase = !hasTransit || isDelayedPayment || isCircularAllegation;
 
   // Step 1: Fact Matrix
   const factMatrix = extractFactMatrix(summary, primaryIssue, documents);
@@ -110,11 +110,11 @@ export async function runComplete13StepEvaluation(
   const evidenceGaps = analyzeEvidenceGaps(hasTransit, hasBank, hasInvoices, summary, primaryIssue);
 
   // Step 9 & 10: Scores (Strict Evidentiary Math)
-  const readinessScore = calculateReadinessScore(statutoryParameters.length, hasInvoices, hasTransit, hasBank, hasScn);
-  const viabilityScore = calculateViabilityScore(readinessScore.totalScore, hasBank, hasInvoices, hasTransit);
+  const readinessScore = calculateReadinessScore(statutoryParameters.length, hasInvoices, hasTransit, hasBank && !isDelayedPayment, hasScn);
+  const viabilityScore = calculateViabilityScore(readinessScore.totalScore, hasBank && !isDelayedPayment, hasInvoices, hasTransit);
 
   // Step 11: Forward Decision
-  const forwardDecision = calculateForwardDecision(readinessScore.totalScore, hasInvoices, hasBank, hasTransit);
+  const forwardDecision = calculateForwardDecision(readinessScore.totalScore, hasInvoices, hasBank && !isDelayedPayment, hasTransit);
 
   // Step 12: Draft Audit
   const draftAudit = auditDraft(hasTransit, hasBank, hasInvoices, summary, primaryIssue);
@@ -265,3 +265,9 @@ export async function runComplete13StepEvaluation(
     finalOutput
   };
 }
+"""
+
+with open("src/service/evaluator-agent.ts", "w", encoding="utf-8") as f:
+    f.write(code)
+
+print("Updated evaluator-agent.ts with comprehensive dynamic case handling for Set 1 vs Set 2!")

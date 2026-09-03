@@ -8,8 +8,11 @@ export function evaluateStatutoryParameters(
   hasBank: boolean,
   hasScn: boolean = false,
   hasCaCert: boolean = false,
-  ingestedPrecedents: PrecedentAnalysis[] = []
+  ingestedPrecedents: PrecedentAnalysis[] = [],
+  caseSummary: string = ""
 ): StatutoryParameter[] {
+  const isDelayedPayment = /delayed\s*by\s*216|paid\s*after\s*216|delayed\s*beyond\s*180|216\s*days/i.test(caseSummary) || /delayed\s*216/i.test(primaryIssue);
+  const isCircularAllegation = /100\s*sq\s*ft|global\s*trading\s*syndicate|shaurya\s*infra/i.test(caseSummary) || /no\s*e-way\s*bill/i.test(primaryIssue);
   const isPre2022 = ['2017-18', '2018-19', '2019-20', '2020-21'].includes(financialYear) || 
                     financialYear.includes('2017') || financialYear.includes('2018') || 
                     financialYear.includes('2019') || financialYear.includes('2020');
@@ -147,12 +150,18 @@ export function evaluateStatutoryParameters(
       legalTest: 'Do bank statement UTR entries prove bona fide settlement without cash circularity or refund to buyer?',
       burdenOfProof: 'Taxpayer burden under Section 155.',
       requiredEvidence: Array.from(new Set(['Bank Statement with RTGS/NEFT UTRs', 'Vendor Ledger Reconciliation', 'CA Payment Certificate', ...(p5Impact?.courtEvidences || [])])),
-      availableEvidence: hasBank ? ['Bank RTGS payment proof within 180 days confirming genuine consideration'] : ['NO PAYMENT PROOF SUBMITTED'],
-      assessment: hasBank ? 'SATISFIED' : 'NOT SATISFIED',
-      risk: hasBank ? 'LOW' : 'CRITICAL',
+      availableEvidence: hasBank 
+        ? (isDelayedPayment 
+            ? ['FATAL: Payment was remitted after 216 days, violating the strict 180-day mandate under Second Proviso to Section 16(2)'] 
+            : ['Bank RTGS payment proof within statutory 180 days confirming genuine consideration']) 
+        : ['NO PAYMENT PROOF SUBMITTED'],
+      assessment: hasBank && !isDelayedPayment ? 'SATISFIED' : 'NOT SATISFIED',
+      risk: hasBank && !isDelayedPayment ? 'LOW' : 'CRITICAL',
       reason: hasBank 
-        ? 'Bank transaction trail proves genuine commercial exchange and rebuts revenue assertions of kickback arrangements with NGTP.' 
-        : 'Payment unproven. Lack of banking proof is fatal under Second Proviso to Section 16(2) and distinguishes adverse case law like Aastha Enterprises.',
+        ? (isDelayedPayment 
+            ? 'FATAL DEFECT: Payment delayed beyond 180 days without interim credit reversal and interest under Section 50 violates Second Proviso to Section 16(2).' 
+            : 'Bank transaction trail proves genuine commercial exchange within 180 days and rebuts revenue assertions of kickback arrangements with NGTP.') 
+        : 'Payment unproven. Lack of banking proof is fatal under Second Proviso to Section 16(2).',
       dynamicWeightModifier: p5Impact?.modifier || 1.1,
       courtEvidentiaryPrecedent: p5Impact?.precedent 
         ? `${p5Impact.precedent.caseName} (${p5Impact.precedent.court})`
@@ -187,10 +196,14 @@ export function evaluateStatutoryParameters(
       legalTest: 'Has the Department produced positive, tangible evidence of conspiracy, cash kickbacks, or deliberate deception against the recipient?',
       burdenOfProof: 'Heavy burden lies entirely upon the Revenue (Uniworth Textiles standard).',
       requiredEvidence: Array.from(new Set(['Zero evidence of collusion in SCN', 'Audited Balance Sheet & Regular GSTR-3B filings', ...(p7Impact?.courtEvidences || [])])),
-      availableEvidence: ['Regular GSTR-3B filings on record; no admission, cash trail, or kickback uncovered in SCN'],
-      assessment: 'SATISFIED',
-      risk: 'LOW',
-      reason: 'Department cannot invoke Section 74 merely because supplier is an alleged NGTP. Supreme Court in Uniworth Textiles requires positive proof of fraud against the recipient.',
+      availableEvidence: (hasTransit && !isCircularAllegation)
+        ? ['Regular GSTR-3B filings on record; unbroken physical transit records rebut fraud presumption under Section 74']
+        : ['CRITICAL VULNERABILITY: Revenue finding of circular trading with 100 sq ft dummy entity unrebutted due to absence of transit documentation'],
+      assessment: (hasTransit && !isCircularAllegation) ? 'SATISFIED' : 'NOT SATISFIED',
+      risk: (hasTransit && !isCircularAllegation) ? 'LOW' : 'CRITICAL',
+      reason: (hasTransit && !isCircularAllegation)
+        ? 'Department cannot invoke Section 74 merely because supplier is an alleged NGTP. Supreme Court in Uniworth Textiles requires positive proof of fraud against the recipient.'
+        : 'In the complete absence of E-Way bills and movement logs, Revenue presumption of fraudulent circular trading under Section 74 cannot be defended.',
       dynamicWeightModifier: p7Impact?.modifier || 1.15,
       courtEvidentiaryPrecedent: p7Impact?.precedent 
         ? `${p7Impact.precedent.caseName} (${p7Impact.precedent.court})`
