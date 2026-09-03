@@ -1,4 +1,4 @@
-'use client';
+﻿page_clean_code = """'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '../components/Header';
@@ -566,3 +566,9 @@ export default function HomePage() {
     </div>
   );
 }
+"""
+
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_clean_code)
+
+print("Updated page.tsx with prominent + New Assessment buttons and modal!")

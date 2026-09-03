@@ -1,4 +1,4 @@
-'use client';
+﻿header_clean_code = """'use client';
 
 import React, { useState, useEffect } from 'react';
 import { Scale, FileText, PlusCircle, RefreshCw, Download, Database, Key, Sparkles, FolderOpen, Plus } from 'lucide-react';
@@ -184,3 +184,9 @@ export const Header: React.FC<HeaderProps> = ({
     </>
   );
 };
+"""
+
+with open("src/components/Header.tsx", "w", encoding="utf-8") as f:
+    f.write(header_clean_code)
+
+print("Updated Header.tsx with prominent '+ New Assessment' button!")
