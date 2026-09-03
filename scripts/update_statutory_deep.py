@@ -1,4 +1,4 @@
-import { StatutoryParameter, CaseDocument, PrecedentAnalysis } from '../types';
+﻿code_statutory_deep = """import { StatutoryParameter, CaseDocument, PrecedentAnalysis } from '../types';
 
 export function evaluateStatutoryParameters(
   financialYear: string,
@@ -226,3 +226,9 @@ export function evaluateStatutoryParameters(
     }
   ];
 }
+"""
+
+with open("src/service/statutory-engine.ts", "w", encoding="utf-8") as f:
+    f.write(code_statutory_deep)
+
+print("Updated statutory-engine.ts with dynamic AI precedent impact wiring for all P1-P8 parameters!")
