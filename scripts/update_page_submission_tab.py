@@ -1,4 +1,4 @@
-'use client';
+﻿page_with_submission_tab = """'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '../components/Header';
@@ -700,3 +700,9 @@ export default function HomePage() {
     </div>
   );
 }
+"""
+
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_with_submission_tab)
+
+print("Updated page.tsx with dedicated Written Submission tab!")
