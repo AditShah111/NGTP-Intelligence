@@ -1,4 +1,4 @@
-﻿const dns = require('dns');
+const dns = require('dns');
 try {
   dns.setDefaultResultOrder('ipv4first');
 } catch (e) {}
@@ -35,6 +35,11 @@ app.prepare().then(() => {
         }));
         return;
       }
+
+      // Prevent stale HTML caching
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
+      res.setHeader('Pragma', 'no-cache');
+      res.setHeader('Expires', '0');
 
       await handle(req, res, parsedUrl);
     } catch (err) {
