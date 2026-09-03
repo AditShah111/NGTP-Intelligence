@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: ngtp-litigation-engine
+    env: node
+    plan: free
+    buildCommand: npm install --include=dev && npm run build
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        value: "postgresql://postgres.wvgomkamelpziuwdqgbm:Moksha%40591%24%25@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres"
