@@ -1,4 +1,4 @@
-'use client';
+﻿page_clean_code = """'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
 import { Header } from '../components/Header';
@@ -169,7 +169,7 @@ export default function HomePage() {
           type: selectedDocType,
           fileSize: `${(file.size / 1024).toFixed(1)} KB`,
           uploadedAt: new Date().toISOString().split('T')[0],
-          ocrReadability: 'Clearly readable text',
+          ocrReadability: 'Clearly readable',
           extractedTextSnippet: text.slice(0, 1000)
         });
       }
@@ -489,3 +489,9 @@ export default function HomePage() {
     </div>
   );
 }
+"""
+
+with open("src/app/page.tsx", "w", encoding="utf-8") as f:
+    f.write(page_clean_code)
+
+print("Updated src/app/page.tsx with clean workspace and on-demand historical drawer!")
