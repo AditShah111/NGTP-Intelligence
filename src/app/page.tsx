@@ -371,23 +371,15 @@ export default function HomePage() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-beige-200">
             <div>
               <div className="text-[11px] font-mono uppercase text-slate-400 font-bold tracking-wider mb-0.5">
-                {activeCase ? 'Active Matter Assessment' : 'New Legal Assessment'}
+                {activeCase ? 'Active Matter Assessment' : 'Matter Particulars & Ingestion'}
               </div>
               <h2 className="text-lg sm:text-xl font-serif font-bold text-slate-900">
-                {activeCase ? activeCase.title : 'Ingest Matter & Evidence Dossier'}
+                {activeCase ? activeCase.title : 'Matter Assessment Workspace'}
               </h2>
             </div>
 
             <div className="flex items-center gap-2 flex-wrap">
-              <button
-                onClick={() => setIsNewCaseOpen(true)}
-                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-all shadow-sm"
-              >
-                <Plus className="w-3.5 h-3.5" />
-                <span>+ New Assessment</span>
-              </button>
-
-              {activeCase ? (
+              {activeCase && (
                 <button
                   onClick={handleResetWorkspace}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-beige-100 hover:bg-beige-200 text-slate-700 text-xs font-semibold transition-all shadow-sm"
@@ -395,14 +387,6 @@ export default function HomePage() {
                 >
                   <X className="w-3.5 h-3.5" />
                   <span>Clear Screen</span>
-                </button>
-              ) : (
-                <button
-                  onClick={() => setIsHistoryDrawerOpen(true)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-beige-100 hover:bg-beige-200 text-slate-700 text-xs font-semibold transition-all shadow-sm"
-                >
-                  <FolderOpen className="w-3.5 h-3.5 text-amber-700" />
-                  <span>Past Cases ({cases.length})</span>
                 </button>
               )}
             </div>
@@ -469,7 +453,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* DEDICATED TABS: WRITTEN SUBMISSION vs DOCUMENTARY EVIDENCE */}
+          {/* CLEAN TABS: WRITTEN SUBMISSION vs DOCUMENTARY EVIDENCE */}
           <div className="mt-6 pt-4 border-t border-beige-200">
             <div className="flex items-center gap-2 border-b border-beige-200 pb-3">
               <button
@@ -481,9 +465,9 @@ export default function HomePage() {
                 }`}
               >
                 <FileEdit className="w-4 h-4" />
-                <span>Tab 1: Written Submission (SCN Reply / Appeal Grounds)</span>
+                <span>Written Submission</span>
                 {writtenSubmission.trim() && (
-                  <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
+                  <span className="w-2 h-2 rounded-full bg-emerald-400" title="Written submission present"></span>
                 )}
               </button>
 
@@ -496,10 +480,14 @@ export default function HomePage() {
                 }`}
               >
                 <FolderArchive className="w-4 h-4" />
-                <span>Tab 2: Documentary Evidence (Invoices, Bank, E-Way Bills)</span>
-                <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-white/20 text-white font-bold">
-                  {uploadedDocuments.length}
-                </span>
+                <span>Documentary Evidence</span>
+                {uploadedDocuments.length > 0 && (
+                  <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded font-bold ${
+                    ingestTab === 'evidence' ? 'bg-white/25 text-white' : 'bg-beige-200 text-slate-800'
+                  }`}>
+                    {uploadedDocuments.length}
+                  </span>
+                )}
               </button>
             </div>
 
