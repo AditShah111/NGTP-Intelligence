@@ -444,6 +444,8 @@ export default function HomePage() {
                   <option value="Invoice">Tax Invoice (Sec 16(2)(a))</option>
                   <option value="Bank Statement">Bank Statement / RTGS (2nd Proviso & Suncraft)</option>
                   <option value="E-Way Bill">E-Way Bill (Sec 16(2)(b) Transit)</option>
+                  <option value="Statement of Facts">Statement of Facts (SOF)</option>
+                  <option value="Grounds of Appeal">Grounds of Appeal / Draft Reply</option>
                   <option value="SCN">Show Cause Notice (DRC-01)</option>
                   <option value="DRC-07">Order-in-Original (DRC-07)</option>
                   <option value="CA Certificate">Circular 183 CA Certificate</option>

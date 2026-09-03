@@ -254,7 +254,7 @@ export interface FinalEvaluatorOutput {
 export interface CaseDocument {
   id: string;
   name: string;
-  type: 'SCN' | 'DRC-01' | 'DRC-07' | 'Reply' | 'APL-01' | 'Invoice' | 'E-Way Bill' | 'GSTR-1' | 'GSTR-2A' | 'GSTR-2B' | 'GSTR-3B' | 'Bank Statement' | 'Ledger' | 'Transporter Bilty' | 'CA Certificate' | 'Other';
+  type: 'SCN' | 'DRC-01' | 'DRC-07' | 'Reply' | 'APL-01' | 'Statement of Facts' | 'Grounds of Appeal' | 'Invoice' | 'E-Way Bill' | 'GSTR-1' | 'GSTR-2A' | 'GSTR-2B' | 'GSTR-3B' | 'Bank Statement' | 'Ledger' | 'Transporter Bilty' | 'CA Certificate' | 'Other';
   fileSize: string;
   uploadedAt: string;
   ocrReadability: OcrReadability;

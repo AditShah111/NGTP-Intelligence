@@ -1,4 +1,4 @@
-'use client';
+﻿summary_view_code = """'use client';
 
 import React, { useState } from 'react';
 import { CaseStudy } from '../types';
@@ -363,3 +363,9 @@ export const ExecutiveSummaryView: React.FC<Props> = ({ caseStudy, onOpenExportM
     </div>
   );
 };
+"""
+
+with open("src/components/ExecutiveSummaryView.tsx", "w", encoding="utf-8") as f:
+    f.write(summary_view_code)
+
+print("Updated ExecutiveSummaryView.tsx with Statement of Facts and Grounds of Appeal Review card!")
