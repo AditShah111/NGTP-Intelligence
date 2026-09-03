@@ -35,6 +35,7 @@ export default function HomePage() {
   const [cases, setCases] = useState<CaseStudy[]>([]);
   const [activeCase, setActiveCase] = useState<CaseStudy | null>(null);
   const [scopeRejection, setScopeRejection] = useState<NGTPGatekeeperResult | null>(null);
+  const [evalError, setEvalError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isDbConnected, setIsDbConnected] = useState<boolean>(true);
 
@@ -163,8 +164,9 @@ export default function HomePage() {
     }
 
     setIsLoading(true);
+    setEvalError(null);
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 8000);
+    const timeoutId = setTimeout(() => controller.abort(), 60000);
 
     try {
       const geminiApiKey = typeof window !== 'undefined' ? (localStorage.getItem('ngtp_gemini_api_key') || undefined) : undefined;
@@ -188,7 +190,7 @@ export default function HomePage() {
 
       clearTimeout(timeoutId);
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.status === 422 || data.notApplicable) {
         setActiveCase(null);
         setScopeRejection({
@@ -199,16 +201,25 @@ export default function HomePage() {
           matchedKeywords: [],
           allowedTopics: data.allowedTopics || []
         });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
 
       if (res.ok && data.evaluatedCase) {
         setScopeRejection(null);
+        setEvalError(null);
         setActiveCase(data.evaluatedCase);
         setCases(prev => [data.evaluatedCase, ...prev.filter(c => c.id !== data.evaluatedCase.id)]);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        setEvalError(data.error || `Evaluation returned error status ${res.status}`);
       }
     } catch (err: any) {
-      console.warn('Evaluation response:', err.message);
+      console.error('Evaluation failed:', err);
+      const isAbort = err.name === 'AbortError' || err.message?.includes('aborted');
+      setEvalError(isAbort 
+        ? 'Evaluation timed out after 60 seconds. Please check historical cases or re-run.' 
+        : `Evaluation failed: ${err.message || 'Network request error'}`);
     } finally {
       clearTimeout(timeoutId);
       setIsLoading(false);
@@ -371,6 +382,10 @@ export default function HomePage() {
     setPrimaryIssue(c.primaryIssue);
     setWrittenSubmission(c.summary);
     setUploadedDocuments(c.documents || []);
+    setIsHistoryDrawerOpen(false);
+    setEvalError(null);
+    setScopeRejection(null);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   return (
@@ -389,6 +404,88 @@ export default function HomePage() {
 
       {/* Main Container */}
       <main className="flex-grow max-w-5xl w-full mx-auto px-4 sm:px-6 py-6 space-y-6">
+                {/* EVALUATION ERROR BANNER */}
+        {evalError && (
+          <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-5 shadow-sm animate-fade-in flex items-start justify-between gap-3 text-xs">
+            <div className="flex items-center gap-3">
+              <span className="text-xl">⚠️</span>
+              <div>
+                <strong className="text-rose-900 font-bold block">Evaluation Alert:</strong>
+                <span className="text-rose-800">{evalError}</span>
+              </div>
+            </div>
+            <button onClick={() => setEvalError(null)} className="text-slate-400 hover:text-slate-700">
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        )}
+
+        {/* NON-NGTP SCOPE REJECTION BANNER */}
+        {scopeRejection && (
+          <div className="bg-rose-50 border-2 border-rose-300 rounded-2xl p-6 sm:p-7 shadow-md animate-fade-in space-y-4">
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-xl bg-rose-100 border border-rose-200 flex items-center justify-center flex-shrink-0 text-rose-700 font-bold text-lg">
+                  ⛔
+                </div>
+                <div>
+                  <span className="text-[11px] font-mono uppercase font-bold text-rose-800 tracking-wider">
+                    Execution Halted &bull; Statutory Scope Filter
+                  </span>
+                  <h3 className="text-lg font-serif font-bold text-slate-900">
+                    NOT APPLICABLE: Non-NGTP Matter Detected
+                  </h3>
+                </div>
+              </div>
+              <button
+                onClick={() => setScopeRejection(null)}
+                className="text-slate-400 hover:text-slate-700 p-1"
+                title="Dismiss"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-4 rounded-xl bg-white border border-rose-200 space-y-2">
+              <div className="text-xs text-slate-800 font-sans leading-relaxed">
+                <strong className="text-rose-900">Detected Subject Domain:</strong>{' '}
+                <span className="font-mono font-semibold px-2 py-0.5 rounded bg-rose-100 text-rose-900">
+                  {scopeRejection.detectedDomain}
+                </span>
+              </div>
+              <p className="text-xs text-slate-600 font-sans leading-relaxed">
+                {scopeRejection.rejectionReason}
+              </p>
+            </div>
+
+            <div className="pt-1">
+              <span className="text-[11px] font-mono font-bold text-slate-700 uppercase block mb-2">
+                Permitted NGTP Disputes for this Engine:
+              </span>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                {scopeRejection.allowedTopics?.map((topic, i) => (
+                  <div key={i} className="flex items-center gap-2 p-2 rounded-lg bg-white/80 border border-rose-100 text-slate-700">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />
+                    <span>{topic}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-2 flex justify-end">
+              <button
+                onClick={() => {
+                  setScopeRejection(null);
+                  handleResetWorkspace();
+                }}
+                className="px-4 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold shadow-sm transition-all"
+              >
+                Reset to Clean NGTP Assessment
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Background Agent Execution Banner */}
         {isLoading && (
           <div className="p-4 rounded-2xl bg-amber-50 border border-amber-200 flex items-center justify-between text-xs text-amber-900 font-medium animate-pulse shadow-sm">
