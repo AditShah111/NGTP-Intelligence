@@ -1,0 +1,47 @@
+FORM GST APL-01: MEMORANDUM OF APPEAL UNDER SECTION 107
+BEFORE THE APPELLATE AUTHORITY & JOINT COMMISSIONER OF STATE TAX (APPEALS), THANE
+
+APPEAL NO: GST/APL/THN/2024-25/0192
+DATE OF FILING: 15-04-2024
+
+IN THE MATTER OF:
+M/s SHAURYA INFRA PROJECTS LTD.
+Plot No. 88, Wagle Industrial Estate, Thane West, Maharashtra - 400604
+GSTIN: 27AAACS4321D1Z8                                                    ... APPELLANT
+
+VERSUS
+
+DEPUTY COMMISSIONER OF STATE TAX, NODAL-7, THANE
+Office of the Joint Commissioner of State Tax, Thane Division             ... RESPONDENT / PROPER OFFICER
+
+========================================================================================================
+STATEMENT OF FACTS
+========================================================================================================
+
+1. The Appellant is an infrastructure contractor holding valid GST registration bearing GSTIN: 27AAACS4321D1Z8.
+
+2. In August 2019, the Appellant entered into an informal arrangement for procurement of building materials from M/s Global Trading Syndicate (GSTIN: 27AAHPG9988K1Z5).
+
+3. The supplier issued Tax Invoice No. GTS/19-20/0118 dated 14-08-2019 for a total amount of INR 3,40,88,888/- including CGST of INR 26,00,000/- and SGST of INR 26,00,000/- (Total Tax: INR 52,00,000/-).
+
+4. Due to extreme liquidity constraints and delays in client milestone disbursements, the Appellant could not pay the supplier within 180 days. The payment was eventually cleared via RTGS on 18-03-2020 (after 216 days from the invoice date). The Appellant did not reverse the credit in the interim period.
+
+5. Furthermore, the supplier arranged delivery through local unorganized third-party transport. Consequently, no E-Way bills were generated in the portal, and no weighbridge slips or FASTag toll records are available with the Appellant.
+
+6. The Respondent issued Show Cause Notice and subsequently passed Order-in-Original in Form GST DRC-07 dated 22-01-2024 disallowing ITC of INR 52,00,000/- under Section 16(2)(b) and Section 16(2)(c), demanding interest of INR 46,80,000/- under Section 50, and imposing 100% penalty of INR 52,00,000/- under Section 74(1) on allegations of circular trading and non-movement of goods.
+
+========================================================================================================
+GROUNDS OF APPEAL (DEFICIENT LEGAL PLEADING)
+========================================================================================================
+
+GROUND I: CLAIM OF BONA FIDE STATUS WITHOUT TRANSIT CORROBORATION
+For that the Appellant possessed a tax invoice and paid the invoice value via banking channels on 18-03-2020. The Adjudicating Authority ought to have accepted the invoice as conclusive proof of supply. (Note: The pleading fails to rebut the total absence of E-Way bills or physical transit proofs under Section 16(2)(b) and Section 155).
+
+GROUND II: RELIANCE ON SUNCRAFT ENERGY DESPITE PROVEN SHELL ENTITY FINDING
+For that the Respondent should have proceeded against the supplier first under the ratio of Suncraft Energy. (Note: Unlike genuine matters where the seller was an active operating mill, here the Revenue physically proved the supplier was a non-existent 100 sq ft ghost entity with cancelled registration, rendering the transaction vulnerable to Malik Traders and Section 74).
+
+GROUND III: FAILURE TO PLEAD SECTION 16(2) SECOND PROVISO REVERSAL
+The Appellant admits that payment was made after 216 days, but pleads that late payment should not disentitle the Appellant from ITC once paid. (Note: The pleading concedes violation of the statutory 180-day mandate without proving compliance with interest under Section 50).
+
+PRAYER
+Wherefore, the Appellant prays that the Impugned Order dated 22-01-2024 may be quashed.
