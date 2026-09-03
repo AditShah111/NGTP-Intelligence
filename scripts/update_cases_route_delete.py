@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+﻿code_cases_route = """import { NextResponse } from 'next/server';
 import { getAllCases, saveCase, getCaseById, deleteCaseById, clearAllCases } from '../../../repo/case-repo';
 import { CaseEvaluationRequestSchema, CaseDocument } from '../../../types';
 import { runComplete13StepEvaluation } from '../../../service/evaluator-agent';
@@ -67,3 +67,9 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ success: false, error: err.message }, { status: 500 });
   }
 }
+"""
+
+with open("src/app/api/cases/route.ts", "w", encoding="utf-8") as f:
+    f.write(code_cases_route)
+
+print("Updated src/app/api/cases/route.ts with DELETE handler!")

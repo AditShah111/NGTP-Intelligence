@@ -75,18 +75,22 @@ export default function HomePage() {
           setIsDbConnected(hData.database === 'connected');
         }
 
+        const isCleared = typeof window !== 'undefined' && localStorage.getItem('ngtp_history_cleared') === 'true';
+
         const res = await fetch('/api/cases');
         if (res.ok) {
           const data = await res.json();
           if (data.cases && data.cases.length > 0) {
             setCases(data.cases);
           } else {
-            setCases(BENCHMARK_CASES);
+            setCases([]);
           }
+        } else {
+          setCases([]);
         }
       } catch (err) {
-        console.warn('Using client-side benchmark cases:', err);
-        setCases(BENCHMARK_CASES);
+        console.warn('Cases load:', err);
+        setCases([]);
       }
     }
     loadData();
@@ -106,8 +110,9 @@ export default function HomePage() {
     setUploadedDocuments([]);
   };
 
-  // Clear all historical cases / cache
+  // Clear all historical cases / cache permanently
   const handleClearHistory = () => {
+    localStorage.setItem('ngtp_history_cleared', 'true');
     setCases([]);
     handleResetWorkspace();
   };
@@ -687,6 +692,7 @@ export default function HomePage() {
         activeCaseId={activeCase?.id}
         onSelectCase={handleSelectHistoricalCase}
         onClearHistory={handleClearHistory}
+        onDeleteSingleCase={(id) => setCases(prev => prev.filter(c => c.id !== id))}
       />
 
       {/* Export Modal */}

@@ -1,4 +1,4 @@
-import { CaseStudy } from '../types';
+﻿code_case_repo = """import { CaseStudy } from '../types';
 import { pool, initDbSchema } from './db';
 
 // Clean in-memory cache (starts empty, NEVER auto-seeds dummy cases)
@@ -120,3 +120,9 @@ export async function clearAllCases(): Promise<boolean> {
     return false;
   }
 }
+"""
+
+with open("src/repo/case-repo.ts", "w", encoding="utf-8") as f:
+    f.write(code_case_repo)
+
+print("Updated src/repo/case-repo.ts with permanent delete & clear functions!")

@@ -1,4 +1,4 @@
-'use client';
+﻿drawer_code = """'use client';
 
 import React, { useState } from 'react';
 import { CaseStudy } from '../types';
@@ -277,3 +277,9 @@ export const HistoricalCasesDrawer: React.FC<Props> = ({
     </>
   );
 };
+"""
+
+with open("src/components/HistoricalCasesDrawer.tsx", "w", encoding="utf-8") as f:
+    f.write(drawer_code)
+
+print("Updated HistoricalCasesDrawer.tsx with explicit confirmation modals & permanent delete API!")
